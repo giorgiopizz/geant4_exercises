@@ -10,6 +10,7 @@
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4ThreeVector.hh"
+#include "G4SystemOfUnits.hh"
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -88,7 +89,7 @@ private:
   //! 3rd telescope plane
   G4VPhysicalVolume* physiThirdSensor;
   //! subdivisions of a plane in sensor strips
-  G4VPhysicalVolume * physiSensorStrip; 
+  G4VPhysicalVolume * physiSensorStrip;
   //@}
 
   //! \name Parameters for tracker

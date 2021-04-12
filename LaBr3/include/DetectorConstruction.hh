@@ -1,6 +1,6 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "G4ThreeVector.hh"
-#include "G4SystemofUnits.hh"
+#include "G4SystemOfUnits.hh"
 
  class G4LogicalVolume;
  class G4VPhysicalVolume;
