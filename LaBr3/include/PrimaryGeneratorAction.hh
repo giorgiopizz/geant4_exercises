@@ -16,4 +16,4 @@ private:
     G4VPrimaryGenerator * InitializeGPS();
     G4VPrimaryGenerator * gun;
     std::ofstream * outfile;
-}
+};

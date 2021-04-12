@@ -1,10 +1,13 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4Version.hh"
-
 #include "G4VisExecutive.hh"
+#if G4VERSION_NUMBER>=930
+#include "G4UIExecutive.hh"
+#else
 #include "G4UIterminal.hh"
 #include "G4Uitcsh.hh"
+#endif
 // queste sotto sono classi mie
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"   //pcelle primarie
@@ -49,22 +52,36 @@ int main(int argc, char ** argv)
 
 
 
-    // G4VisManager * visManager = new G4VisExecutive();
-    // visManager->Initialize();
-    //
-    // // devo prendere puntatore allo user interface manager (è un singleton)
-    // G4UImanager * UImanager = G4UImanager::GetUIpointer();
-    //
-    // if (argc!=1) //batch mode
-    // {
-    //     G4String command = "/control/execute ";
-    //     G4String filename = argv[1];
-    //     UImanager->ApplyCommand(command + filename);
-    // }
-    // else{
-    //     G4UIExecutive * ui = new G4UIExecutive(argc, argv);
-    //
-    // }
+    G4VisManager * visManager = new G4VisExecutive();
+    visManager->Initialize();
+
+    // devo prendere puntatore allo user interface manager (è un singleton)
+    G4UImanager * UImanager = G4UImanager::GetUIpointer();
+
+    if (argc!=1) //batch mode
+    {
+        G4String command = "/control/execute ";
+        G4String filename = argv[1];
+        UImanager->ApplyCommand(command + filename);
+    }
+    else{
+        #if G4VERSION_NUMBER>930
+        G4UIExecutive * ui = new G4UIExecutive(argc, argv);
+        if (ui->isGUI())
+        {
+            UImanager->ApplyCommand("/control/execute visQt.mac");
+        }
+        else{
+            UImanager->ApplyCommand("/control/execute vis.mac");
+        }
+        #else
+        G4UIsession * ui = new G4UIterminal();
+        #endif
+        UImanager ->ApplyCommand("/control/execute ")
+        ui->SessionStart();
+        delete ui;
+    }
 
     delete runManager;
+    return 0;
 }

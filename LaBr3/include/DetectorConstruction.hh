@@ -46,4 +46,4 @@
     G4double halfLaBr3Det_z;
 
     DetectorMessenger * messenger;
- }
+};
