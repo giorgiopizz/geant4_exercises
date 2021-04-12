@@ -3,7 +3,7 @@
 #include "G4SystemofUnits.hh"
 
  class G4LogicalVolume;
- classs G4VPhysicalVolume;
+ class G4VPhysicalVolume;
  class G4Material;
  class DetectorMessenger;
 

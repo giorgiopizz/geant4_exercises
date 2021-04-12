@@ -7,7 +7,7 @@
 #include "G4Uitcsh.hh"
 // queste sotto sono classi mie
 #include "DetectorConstruction.hh"
-#include "PrimaryGenerationAction.hh"   //pcelle primarie
+#include "PrimaryGeneratorAction.hh"   //pcelle primarie
 #include "QGSP_BERT_HP.hh"              //physics list
 
 #include "EventAction.hh"
@@ -34,7 +34,7 @@ int main(int argc, char ** argv)
     runManager->SetUserInitialization(physics);
 
     // mandatory user action classes
-    G4VUserPrimaryGenerationAction * gen_action = new PrimaryGenerationAction();
+    G4VUserPrimaryGeneratorAction * gen_action = new PrimaryGeneratorAction();
     runManager->SetUserAction(gen_action);
 
 
