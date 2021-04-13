@@ -139,6 +139,17 @@ G4VPhysicalVolume * DetectorConstruction::Construct_LaBr3Detector()
                                     LaBr3_copynum); //copynumber
     logicLaBr3->SetVisAttributes(new G4VisAttributes(green));
 
-    //Sensitive detector
+    //Define the LaBr3 as Sensitive detector
+    static SensitiveDetector * sensitive = 0;
+    if( !sensitive )
+    {
+        G4cout << " Declaring Sensitive Detector " << G4endl;
+        sensitive = new SensitiveDetector("/myDet/SD"); // lo metto nella directory del bash
+        // we register the SD with the mangare
+        G4SDManager::GetSDMPointer()->AddNewDetector(sensitive);
+        G4cout << "Sensitive Detector added " << G4endl;
+    }
+    logicLaBr3->SetSensitiveDetector(sensitive);
+
     return physiLaBr3;
 }
