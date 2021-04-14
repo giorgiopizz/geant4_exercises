@@ -1,7 +1,9 @@
 
 # Add gps macro commands
 
-...
+/gps/energy 2. GeV
+/gps/direction 0 0 1
+/gps/position 0 0 -1. m
 
 # Generate an event
 /run/beamOn 1

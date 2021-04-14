@@ -8,11 +8,11 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4GeneralParticleSource.hh"
-
+#include "G4SystemOfUnits.hh"
 
 class G4VPrimaryGenerator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 /*!
 \brief This mandatory user class provides the primary particle generator
 
@@ -32,7 +32,7 @@ public:
   ~PrimaryGeneratorAction();
   //! defines primary particles (mandatory)
   void GeneratePrimaries(G4Event*);
-private:  
+private:
   //  G4VPrimaryGenerator* gun;
   G4GeneralParticleSource* gun;
 

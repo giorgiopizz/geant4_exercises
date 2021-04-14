@@ -1,4 +1,4 @@
-# Macro file for the 
+# Macro file for the
 # initialization of G4GeneralParticleSource
 # to be used together with "task2b.c"
 #
@@ -13,7 +13,7 @@
 /gps/pos/sigma_y 0.1 mm
 
 #
-# Gauss distribution in angle 
+# Gauss distribution in angle
 /gps/ang/type beam2d
 /gps/ang/sigma_x 0.1 mrad
 /gps/ang/sigma_y 0.1 mrad
@@ -21,3 +21,12 @@
 #
 /run/beamOn 50
 
+
+
+/gps/ang/type iso
+/gps/energy 2. GeV
+/gps/position 0. 0. 0. m
+/gps/particle proton
+
+
+/run/beamOn 20
