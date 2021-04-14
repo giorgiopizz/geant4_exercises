@@ -1,19 +1,19 @@
+// $Id: PrimaryGeneratorAction.hh 283 2010-02-14 23:31:12Z selles $
+
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-/*!
-\file
-\brief defines mandatory user class PrimaryGeneratorAction
-*/
+/**
+ * @file
+ * @brief Defines mandatory user class PrimaryGeneratorAction.
+ */
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4GeneralParticleSource.hh"
 #include "G4ParticleGun.hh"
-#include "G4ParticleDefinition.hh"
+#include <fstream>
 #include "G4SystemOfUnits.hh"
 
 class G4VPrimaryGenerator;
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 /*!
 \brief This mandatory user class provides the primary particle generator
@@ -23,12 +23,11 @@ Geant4 provides a number of predefined primary particle generator, to be utilise
  - G4GeneralParticleSource
 
 \sa GeneratePrimaries()
- */
+*/
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-  G4ParticleDefinition *particle;
   //! constructor
   PrimaryGeneratorAction();
   //! destructor
@@ -36,9 +35,8 @@ public:
   //! defines primary particles (mandatory)
   void GeneratePrimaries(G4Event*);
 private:
-  //  G4VPrimaryGenerator* gun;
-  //G4GeneralParticleSource* gun;
- G4ParticleGun* gun;
+  G4ParticleGun* gun;
+  std::ofstream * outfile;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

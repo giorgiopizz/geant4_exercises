@@ -1,27 +1,34 @@
-// $Id: PhysicsList.cc 98 2010-01-26 15:59:09Z vnivanch $
-/**
- * @file
- * @brief Implements mandatory user class PhysicsList.
- */
+/*!
+\file
+\brief implements mandatory user class PhysicsList
+*/
 
 #include "globals.hh"
 #include "PhysicsList.hh"
 
-#include "G4EmStandardPhysics.hh"
-#include "G4LossTableManager.hh"
-
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
+#include "G4IonConstructor.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList():  G4VUserPhysicsList()
 {
-  defaultCutValue = 10.0*um;
+  defaultCutValue = 1.0*mm;
   SetVerboseLevel(1);
-  emPhysicsList = new G4EmStandardPhysics();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
@@ -30,35 +37,71 @@ void PhysicsList::ConstructParticle()
   // This ensures that objects of these particle types will be
   // created in the program. 
 
+
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
 
-  // define gamma, e+, e- and some charged Hadrons
-  emPhysicsList->ConstructParticle();
+
+ G4LeptonConstructor lepton;
+  lepton.ConstructParticle();
+ 
+  G4BosonConstructor boson;
+  boson.ConstructParticle();
+
+  G4MesonConstructor meson;
+  meson.ConstructParticle();
+
+  G4BaryonConstructor baryon;
+  baryon.ConstructParticle();
+
+  G4ShortLivedConstructor shortLived;
+  shortLived.ConstructParticle();
+
+  G4IonConstructor ion;
+  ion.ConstructParticle();
 
   /*
-// gamma
-  G4Gamma::Gamma();
+  // other particles
+ // leptons
+  //  e+/-
+  G4Electron::ElectronDefinition();
+  G4Positron::PositronDefinition();
+  // mu+/-
+  G4MuonPlus::MuonPlusDefinition();
+  G4MuonMinus::MuonMinusDefinition();
+  // nu_e
+  G4NeutrinoE::NeutrinoEDefinition();
+  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  // nu_mu
+  G4NeutrinoMu::NeutrinoMuDefinition();
+  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 
-// leptons
-  G4Electron::Electron();
-  G4Positron::Positron();
-  G4MuonPlus::MuonPlus();
-  G4MuonMinus::MuonMinus();
+ //    light mesons
+  G4PionPlus::PionPlusDefinition();
+  G4PionMinus::PionMinusDefinition();
+  G4PionZero::PionZeroDefinition();
+  G4Eta::EtaDefinition();
+  G4EtaPrime::EtaPrimeDefinition();
+  G4KaonPlus::KaonPlusDefinition();
+  G4KaonMinus::KaonMinusDefinition();
+  G4KaonZero::KaonZeroDefinition();
+  G4AntiKaonZero::AntiKaonZeroDefinition();
+  G4KaonZeroLong::KaonZeroLongDefinition();
+  G4KaonZeroShort::KaonZeroShortDefinition();
   */
-
-  // mesons
-  //  G4PionPlus::PionPlusDefinition();
-  //  G4PionMinus::PionMinusDefinition();
-
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  emPhysicsList->ConstructProcess();
+
 }
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCuts()
 {
@@ -69,4 +112,6 @@ void PhysicsList::SetCuts()
      
   if (verboseLevel>0) DumpCutValuesTable();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

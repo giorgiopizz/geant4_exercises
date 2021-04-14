@@ -1,15 +1,17 @@
+// $Id: DetectorConstruction.hh 33 2010-01-14 17:08:18Z adotti $
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-/*!
-\file
-\brief defines mandatory user class DetectorConstruction
-*/
+/**
+ * @file
+ * @brief Defines mandatory user class DetectorConstruction.
+ */
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4ThreeVector.hh"
 #include "G4SystemOfUnits.hh"
+
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
@@ -40,9 +42,6 @@ public:
   //! Update geometry
   void UpdateGeometry();
 
-  //! Construct device under test
-  G4VPhysicalVolume* ConstructDeviceUnderTest();
-
   //! \name some simple set & get functions
   //@{
   G4ThreeVector FirstSensorPosition() const  { return posFirstSensor; }
@@ -53,6 +52,8 @@ public:
   G4ThreeVector SetSecondSensorPosition(const G4ThreeVector & pos) { return posSecondSensor=pos; }
   G4ThreeVector SetThirdSensorPosition(const G4ThreeVector & pos) { return posThirdSensor=pos; }
 
+  G4bool   IsDUTSetup() const { return isSecondPlaneDUT; }
+  G4bool   SetDUTSetup( const G4bool& flag ) { return isSecondPlaneDUT=flag; }
   G4double DUTangle() const { return dutTheta; }
   G4double SetDUTangle(const G4double theta)  { return dutTheta=theta; }
   //@}
@@ -61,6 +62,10 @@ private:
   void DefineMaterials();
   //! initialize geometry parameters
   void ComputeParameters();
+  //! Construct geometry of the Beam Telescope
+  G4VPhysicalVolume* ConstructTelescope();
+  //! Construct geometry of the Device-under-test
+  G4VPhysicalVolume* ConstructDeviceUnderTest();
 
 private:
 
@@ -105,6 +110,8 @@ private:
 
   G4double dutStripPitch;
   G4double dutTheta;
+
+  G4bool isSecondPlaneDUT;
   //@}
 
   //! \name UI Messenger

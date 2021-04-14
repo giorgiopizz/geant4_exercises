@@ -1,8 +1,8 @@
-// $Id: $
-/*!
-\file
-\brief implements class DetectorMessenger
-*/
+// $Id: DetectorMessenger.cc 94 2010-01-26 13:18:30Z adotti $
+/**
+ * @file
+ * @brief Implements class DetectorMessenger.
+ */
 
 #include "DetectorMessenger.hh"
 #include "DetectorConstruction.hh"
@@ -11,8 +11,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4UIcmdWithABool.hh"
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
 :detector(det)
@@ -32,7 +31,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
   xShiftCmd->SetDefaultUnit("um");
 
   yShiftCmd = new G4UIcmdWithADoubleAndUnit("/det/secondSensor/yShift",this);
-  yShiftCmd->SetGuidance("Define x-shift of second sensor plane");
+  yShiftCmd->SetGuidance("Define y-shift of second sensor plane");
   yShiftCmd->SetParameterName("yShift",true);
   yShiftCmd->SetDefaultValue(0.);
   yShiftCmd->SetUnitCategory("Length");
@@ -44,20 +43,24 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
   thetaCmd->SetUnitCategory("Angle");
   thetaCmd->SetDefaultUnit("deg");
 
+  setDUTsetupCmd = new G4UIcmdWithABool("/det/secondSensor/DUTsetup",this);
+  setDUTsetupCmd->SetGuidance("Select setup. true to have DUT (Device Under Test) setup: second Si plane replaced by DUT");
+  setDUTsetupCmd->AvailableForStates(G4State_Idle);
+
   updateCmd = new G4UIcmdWithoutParameter("/det/update",this);
   updateCmd->SetGuidance("force to recompute geometry.");
   updateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   updateCmd->SetGuidance("if you changed geometrical value(s).");
   updateCmd->AvailableForStates(G4State_Idle);
-}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+}
 
 DetectorMessenger::~DetectorMessenger()
 {
   delete xShiftCmd;
   delete yShiftCmd;
   delete thetaCmd;
+  delete setDUTsetupCmd;
 
   delete secondSensorDir;
 
@@ -65,8 +68,6 @@ DetectorMessenger::~DetectorMessenger()
 
   delete detDir;  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
@@ -87,6 +88,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
               
   if ( command == updateCmd )
     detector->UpdateGeometry();
+
+  if ( command == setDUTsetupCmd )
+	detector->SetDUTSetup( setDUTsetupCmd->GetNewBoolValue(newValue) );
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

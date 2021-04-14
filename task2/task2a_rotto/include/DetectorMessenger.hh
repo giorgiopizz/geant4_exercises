@@ -1,12 +1,12 @@
+// $Id: DetectorMessenger.hh 33 2010-01-14 17:08:18Z adotti $
+
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
-// 
-// $Id: $
-//
-/*!
-\file
-\brief defines class DetectorMessenger
-*/
+
+/**
+ * @file
+ * @brief defines class DetectorMessenger
+ */
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -19,6 +19,7 @@ class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,6 +55,8 @@ private:
   G4UIcmdWithADoubleAndUnit* thetaCmd;    
 
   G4UIcmdWithoutParameter*   updateCmd;    
+
+  G4UIcmdWithABool*			 setDUTsetupCmd;
 };
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

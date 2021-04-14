@@ -1,15 +1,19 @@
+// $Id: PhysicsList.hh 22 2009-12-22 12:36:46Z schaelic $
+
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
 
-/*!
-\file
-\brief defines mandatory user class PhysicsList
+/**
+ * @file
+ * @brief Defines mandatory user class PhysicsList.
 */
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class G4VPhysicsConstructor;
 
 /*!
 \brief This mandatory user class provides the physics
@@ -39,6 +43,9 @@ protected:
   //! Define user cuts
   void SetCuts();
   //@}
+private:
+
+  G4VPhysicsConstructor*  emPhysicsList;
 
 };
 
