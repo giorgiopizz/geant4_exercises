@@ -25,9 +25,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   // if you don't update here, the default will be created, namely: 1 GeV
   // geantino
   // --> from here
-  // particle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+  // particle = G4ParticleTable::GetParticleTable()->FindParticle("pi-");
   // gun->SetParticleDefinition(particle);
-  // gun->SetParticleEnergy(100*MeV);
+  // gun->SetParticleEnergy(1*GeV);
   // <-- to here
 
 }

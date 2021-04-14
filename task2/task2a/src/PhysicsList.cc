@@ -65,31 +65,31 @@ void PhysicsList::ConstructParticle()
   // other particles
  // leptons
   //  e+/-
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  // mu+/-
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-  // nu_e
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  // nu_mu
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
+  // G4Electron::ElectronDefinition();
+  // G4Positron::PositronDefinition();
+  // // mu+/-
+  // G4MuonPlus::MuonPlusDefinition();
+  // G4MuonMinus::MuonMinusDefinition();
+  // // nu_e
+  // G4NeutrinoE::NeutrinoEDefinition();
+  // G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  // // nu_mu
+  // G4NeutrinoMu::NeutrinoMuDefinition();
+  // G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 
  //    light mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
-  
+  // G4PionZero::PionZeroDefinition();
+  // G4Eta::EtaDefinition();
+  // G4EtaPrime::EtaPrimeDefinition();
+  // G4KaonPlus::KaonPlusDefinition();
+  // G4KaonMinus::KaonMinusDefinition();
+  // G4KaonZero::KaonZeroDefinition();
+  // G4AntiKaonZero::AntiKaonZeroDefinition();
+  // G4KaonZeroLong::KaonZeroLongDefinition();
+  // G4KaonZeroShort::KaonZeroShortDefinition();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

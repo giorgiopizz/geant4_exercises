@@ -12,14 +12,14 @@
 #define ROOTSAVER_HH_
 
 #include <string>
-#include <TTree.h>
+// #include <TTree.h>
 #include "SiDigi.hh"
 #include "SiHit.hh"
-class TFile;
-
-// class TTree;
 // class TFile;
-// class Int_t;
+
+class TTree;
+class TFile;
+// class G4int;
 // class Float_t;
 
 
@@ -64,29 +64,29 @@ private:
 	//! \name TTree variables
 	//@{
 	//! Number of strips of each module
-	Int_t nStrips;
+	G4int nStrips;
 	//! Signal in each strip for first module
-	Float_t* Signal1;
+	G4float* Signal1;
 	//! Signal in each strip for first module
-	Float_t* Signal2;
+	G4float* Signal2;
 	//! Signal in each strip for first module
-	Float_t* Signal3;
+	G4float* Signal3;
 	//! "Truth" position of module 1
-	Float_t TruthPos1;
+	G4float TruthPos1;
 	//! "Truth" position of module 2
-	Float_t TruthPos2;
+	G4float TruthPos2;
 	//! "Truth" position of module 3
-	Float_t TruthPos3;
+	G4float TruthPos3;
 	//! Sum of Hits Edep in module 1
-	Float_t TruthE1;
+	G4float TruthE1;
 	//! Sum of Hits Edep in module 2
-	Float_t TruthE2;
+	G4float TruthE2;
 	//! Sum of Hits Edep in module 3
-	Float_t TruthE3;
+	G4float TruthE3;
 	//! X of the primary at origin
-	Float_t TruthPos0;
+	G4float TruthPos0;
 	//! Angle in the xz plane (measured from z-axis) of primary at origin
-	Float_t TruthAngle0;
+	G4float TruthAngle0;
 	//@}
 
 };

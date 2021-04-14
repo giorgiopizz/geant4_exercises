@@ -4,16 +4,18 @@
  *
  * @date   17 Dec 2009
  * @author adotti
- * 
+ *
  * @brief  Implements class RootSaver.
  */
 
 #include "RootSaver.hh"
 #include "SiDigi.hh"
 #include "SiHit.hh"
+#ifdef G4ANALYSIS_USE_ROOT
 #include "TTree.h"
 #include "TFile.h"
 #include "TMath.h"
+#endif
 #include <sstream>
 #include <iostream>
 #include <cassert>
