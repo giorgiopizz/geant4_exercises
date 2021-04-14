@@ -22,10 +22,10 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
   // complete particle name and energy  (do not forget the energy unit)
   G4ParticleDefinition* particle
-           = G4ParticleTable::GetParticleTable()->FindParticle(...);
+           = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   gun->SetParticleDefinition(particle);
-  gun->SetParticleEnergy(...);  
-  
+  gun->SetParticleEnergy(10*MeV);
+
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
@@ -34,8 +34,8 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{ 
-  //this function is called to generate each G4 event 
+{
+  //this function is called to generate each G4 event
 
   // Ex 2a-1 : generate only one particule
 
@@ -47,15 +47,14 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   gun->GeneratePrimaryVertex(anEvent);
 
   // ----------------------------------------
-  // Ex 2a-2 - to generate a set of particules according to a 0.1 x 2 cm rectangle 
+  // Ex 2a-2 - to generate a set of particules according to a 0.1 x 2 cm rectangle
   /*
   G4double z0 = 0.*cm, x0 = 0.*cm, y0 = 0.*cm;
   x0 = -0.05 + 2*0.05*G4UniformRand();
   y0 = -1.0+ 2*G4UniformRand();
-  gun->SetParticlePosition(G4ThreeVector(x0,y0,z0));  
+  gun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   gun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   gun->GeneratePrimaryVertex(anEvent);
   */
 
 }
-

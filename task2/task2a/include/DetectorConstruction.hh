@@ -10,6 +10,7 @@
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4ThreeVector.hh"
+#include "G4SystemOfUnits.hh"
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -89,9 +90,9 @@ private:
   G4VPhysicalVolume* physiThirdSensor;
 
   //! subdivisions of a plane in sensor strips
-  G4VPhysicalVolume * physiSensorStrip; 
+  G4VPhysicalVolume * physiSensorStrip;
   //! subdivisions of the DUT in sensor strips
-  G4VPhysicalVolume * physiSensorStripDUT; 
+  G4VPhysicalVolume * physiSensorStripDUT;
   //@}
 
   //! \name Parameters
@@ -113,7 +114,7 @@ private:
   G4bool isSecondPlaneDUT;
   //@}
 
-  //! \name UI Messenger 
+  //! \name UI Messenger
   //@{
   DetectorMessenger * messenger;
   //@}

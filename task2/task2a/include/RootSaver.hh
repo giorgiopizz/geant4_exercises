@@ -17,6 +17,12 @@
 #include "SiHit.hh"
 class TFile;
 
+// class TTree;
+// class TFile;
+// class Int_t;
+// class Float_t;
+
+
 /*!
  * \brief Save hits and digits to a ROOT TTree.
  *

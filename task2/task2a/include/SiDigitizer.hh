@@ -18,7 +18,7 @@
 #include "MeV2ChargeConverter.hh"
 #include "CrosstalkGenerator.hh"
 #include "SiDigitizerMessenger.hh"
-
+#include "G4SystemOfUnits.hh"
 /*!
  * \brief Simulation of the digitization process
  *
@@ -28,14 +28,14 @@
  * elements of the detector that have been declared sensitive),
  * this class is responsible to convert these hits in the electronic read-out format.
  * \sa SiDigi
- * 
+ *
  * Digitization consists of the following steps:
  *  -# converting the energy deposit in charge
  *  -# simulate the strip cross talk
  *  -# for each strip add a pedestal
  *  -# smear the collected charge with electronic noise
  *  -# add cross talk
- * 
+ *
  * All relevant methods are virtual, you can inherit from
  * this base class to overwrite behaviour.
  * This classes uses two support classes to simulate noise and

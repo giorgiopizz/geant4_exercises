@@ -2,7 +2,10 @@
 
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(task2a)
 
 #----------------------------------------------------------------------------
@@ -31,7 +34,7 @@ find_package(ROOT REQUIRED)
 
 #----------------------------------------------------------------------------
 
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR}
                     ${ROOT_INCLUDE_DIR})
 
@@ -49,7 +52,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(exampletask2a task2a.cc ${sources} ${headers})
-target_link_libraries(exampletask2a ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+target_link_libraries(exampletask2a ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -78,5 +81,3 @@ add_custom_target(task2a DEPENDS exampletask2a)
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS exampletask2a DESTINATION bin)
-
-

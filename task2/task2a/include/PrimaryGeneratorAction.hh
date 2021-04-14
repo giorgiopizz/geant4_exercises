@@ -11,10 +11,10 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
 #include <fstream>
-
+#include "G4SystemOfUnits.hh"
 
 class G4VPrimaryGenerator;
- 
+
 /*!
 \brief This mandatory user class provides the primary particle generator
 
