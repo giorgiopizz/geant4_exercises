@@ -64,13 +64,13 @@ void DetectorConstruction::ConstructField()
 
       // A) Create the field and set it in the field manager
       //    ****************
-      G4MagneticField* myField;
-      // G4ThreeVector  fieldVector( 10.0*tesla, 0.1*kilogauss, 10.0*gauss );
-      G4ThreeVector  fieldVector( 0.0*tesla, 2.5*tesla, 0.0*tesla);
-      //  EDITME: change the value of the field vector above
-      //  Task 1> Set different value for the field
-
-      myField = new G4UniformMagField( fieldVector );
+      G4MagneticField* myField = new SimpleField();
+      // // G4ThreeVector  fieldVector( 10.0*tesla, 0.1*kilogauss, 10.0*gauss );
+      // G4ThreeVector  fieldVector( 0.0*tesla, 2.5*tesla, 0.0*tesla);
+      // //  EDITME: change the value of the field vector above
+      // //  Task 1> Set different value for the field
+      //
+      // myField = new G4UniformMagField( fieldVector );
       //            *****************
       globalFieldMgr->SetDetectorField(myField);
 
@@ -91,6 +91,7 @@ void DetectorConstruction::ConstructField()
       //    *************************
       // Task 4> Set this field manager to the hadronic calorimeter
       // EDITME::hadronicCalorimeter->SetFieldManager( pZeroFieldMgr, true );
+      hadCalo -> GetLogicalVolume() ->SetFieldManager( pZeroFieldMgr, true );
   }
 }
 
