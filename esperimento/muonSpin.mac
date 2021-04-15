@@ -1,12 +1,14 @@
+# $Id:$
+## @file
+#  @brief simple g4 macro
+#
+#  Test
 /gps/particle mu-
 /gps/energy 1. GeV
 /gps/position 0. 0. 0. m
 /gps/direction 0. 0. 1.
 
 /gps/polarization 0. 0. 1.
-
-# si può impostare cut più lungo
 /run/setCut 1 km
 
-
-/run/beamOn 100000
+/run/beamOn 20000

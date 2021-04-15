@@ -1,0 +1,3 @@
+/vis/ogl/set/printFilename ciao.png
+/vis/ogl/set/printSize 1200 800
+/vis/ogl/export
