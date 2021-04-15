@@ -18,11 +18,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   : outfile(0)
 {
   gun = InitializeGPS();
-  
+
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{ 
+{
   gun->GeneratePrimaryVertex(anEvent);
 }
 
@@ -34,12 +34,12 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 G4VPrimaryGenerator* PrimaryGeneratorAction::InitializeGPS()
 {
   G4GeneralParticleSource * gps = new G4GeneralParticleSource();
-  
+
   // setup details easier via UI commands see muon.mac
 
   // particle type
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* muon = particleTable->FindParticle("geantino");  
+  G4ParticleDefinition* muon = particleTable->FindParticle("mu-");
   gps->GetCurrentSource()->SetParticleDefinition(muon);
 
   // set energy distribution
@@ -58,4 +58,3 @@ G4VPrimaryGenerator* PrimaryGeneratorAction::InitializeGPS()
 
   return gps;
 }
-

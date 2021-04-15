@@ -12,7 +12,7 @@
 # (Edit the next line(s) to choose another graphics system)
 #
 /vis/open OGLSQt 600x600-0+0
-#/vis/open OGLIQt 
+#/vis/open OGLIQt
 #
 #
 # draw scene
@@ -33,3 +33,5 @@
 /vis/scene/add/axes 10 0 0 10 cm
 #
 #/run/beamOn 10
+
+#/control/execute muon.mac

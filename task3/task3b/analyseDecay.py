@@ -8,8 +8,13 @@
 # Make a simple fit.
 
 import sys
-sys.path.append("/usr/local/bin/root/lib")
+from sys import argv,platform
 
+if platform == 'darwin':
+    rootPath = '/Applications/root_v6.25.01/lib/'
+else:
+    rootPath = '/usr/local/bin/root/lib'
+sys.path.append(rootPath)
 from math import sqrt, exp
 
 from ROOT import TCanvas, TF1, TFile, TGaxis

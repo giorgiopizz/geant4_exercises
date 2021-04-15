@@ -32,12 +32,12 @@ DetectorConstruction::DetectorConstruction()
 	//--------- Sizes of the principal geometrical components (solids)  ---------
 	ComputeParameters();
 }
- 
+
 DetectorConstruction::~DetectorConstruction()
 {
 }
- 
-void DetectorConstruction::DefineMaterials() 
+
+void DetectorConstruction::DefineMaterials()
 {
 	//Get Materials from NIST database
 	G4NistManager* man = G4NistManager::Instance();
@@ -62,8 +62,8 @@ void DetectorConstruction::DefineMaterials()
 	fe = man->FindOrBuildMaterial("G4_Fe");
 
 }
- 
-void DetectorConstruction::ComputeParameters() 
+
+void DetectorConstruction::ComputeParameters()
 {
 	//This function defines the defaults
 	//of the geometry construction
@@ -93,17 +93,17 @@ void DetectorConstruction::ComputeParameters()
 	hadCaloNumLayers = 80;
 	posHadCalo = G4ThreeVector(0,0,(hadCaloLArThickness+hadCaloFeThickness)*hadCaloNumLayers/2);
 }
- 
+
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
 	//This function is called by G4 when the detector has to be created
 	//--------- Definitions of Solids, Logical Volumes, Physical Volumes ---------
 
-  
+
 	//------------------------------
 	// World
 	//------------------------------
- 
+
 	G4GeometryManager::GetInstance()->SetWorldMaximumExtent(2.*halfWorldLength);
 	G4cout << "Computed tolerance = "
 			<< G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/mm
@@ -112,7 +112,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 	G4Box * solidWorld= new G4Box("world",halfWorldLength,halfWorldLength,halfWorldLength);
 	logicWorld= new G4LogicalVolume( solidWorld, air, "World", 0, 0, 0);
-  
+
 	//  Must place the World Physical volume unrotated at (0,0,0).
 	//
 	G4VPhysicalVolume * physiWorld = new G4PVPlacement(0,               // no rotation
@@ -122,7 +122,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 			0,               // its mother  volume
 			false,           // no boolean operations
 			0);              // copy number
-				 
+
 
 
 	//Construction of the three si plane is actually done here
@@ -144,7 +144,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 	logicWorld -> SetVisAttributes(new G4VisAttributes(white));
 	logicWorld -> SetVisAttributes(G4VisAttributes::Invisible);
-    
+
 	//always return the physical World
 	//
 	return physiWorld;
@@ -301,7 +301,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructHadCalo()
 	//  - Uncomment the line below to add a small uniform magnetic field (35 mT)
 	//    to the detector volume
 	// ********************************************************************************
-	// hadCaloLogic->SetFieldManager(GetLocalFieldManager(),true);
+	hadCaloLogic->SetFieldManager(GetLocalFieldManager(),true);
 	// ---
 
 	G4Colour green(0,1,0);
@@ -340,7 +340,7 @@ void DetectorConstruction::UpdateGeometry()
 G4FieldManager* DetectorConstruction::GetLocalFieldManager()
 {
   // pure magnetic field
-  G4MagneticField* fMagneticField = 
+  G4MagneticField* fMagneticField =
     new G4UniformMagField(G4ThreeVector(3.5e-3*tesla, 0., 0.));
 
   // equation of motion with spin

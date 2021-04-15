@@ -16,6 +16,7 @@
 #include "G4DecayTable.hh"
 #include "G4Decay.hh"
 #include "G4DecayWithSpin.hh"
+// #include "G4PionDecayChannelWithSpin.hh"
 #include "G4MuonDecayChannelWithSpin.hh"
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 // for an more elaborate example with spin see extended example field04
@@ -69,8 +70,8 @@ void PhysicsList::ConstructParticle()
   //   - add particle definitions for mu+ and mu- here
   // ********************************************************************************
 
-  G4MuonPlus::MuonPlus();
-  G4MuonMinus::MuonMinus();
+  G4MuonPlus::MuonPlusDefinition();
+  G4MuonMinus::MuonMinusDefinition();
 
   // ---
 
@@ -96,7 +97,7 @@ void PhysicsList::ConstructParticle()
   //      G4DecayWithSpin
   // ********************************************************************************
   //
-  /*
+
   G4DecayTable* MuonPlusDecayTable = new G4DecayTable();
   MuonPlusDecayTable -> Insert(new G4MuonDecayChannelWithSpin("mu+",0.986));
   MuonPlusDecayTable -> Insert(new G4MuonRadiativeDecayChannelWithSpin("mu+",0.014));
@@ -106,8 +107,19 @@ void PhysicsList::ConstructParticle()
   MuonMinusDecayTable -> Insert(new G4MuonDecayChannelWithSpin("mu-",0.986));
   MuonMinusDecayTable -> Insert(new G4MuonRadiativeDecayChannelWithSpin("mu-",0.014));
   G4MuonMinus::MuonMinusDefinition() -> SetDecayTable(MuonMinusDecayTable);
-  */
+
   // ---
+
+
+  // PARTE FACOLTATIVA CHE AGGIUNGO IO
+    // G4DecayTable* PionPlusDecayTable = new G4DecayTable();
+    // PionPlusDecayTable -> Insert(new G4PionDecayChannelWithSpin("pi+",1)); //dico che il pi+ decade con spin e BR=1
+    // G4PionPlus::PionPlusDefinition() -> SetDecayTable(PionPlusDecayTable);
+    //
+    // G4DecayTable* PionMinusDecayTable = new G4DecayTable();
+    // PionMinusDecayTable -> Insert(new G4PionDecayChannelWithSpin("pi-",1)); //dico che il pi+ decade con spin e BR=1
+    // G4PionMinus::PionMinusDefinition() -> SetDecayTable(PionMinusDecayTable);
+
 }
 
 void PhysicsList::ConstructProcess()
@@ -154,11 +166,13 @@ void PhysicsList::ConstructEM()
       //  - Add the processes G4MuIonisation, G4MuBremsstrahlung, G4MuPairProduction,
       //    and also G4MuMultipleScattering, what order is needed?
       // ********************************************************************************
-      /*
+
       pmanager->AddProcess(new G4MuMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(...);
-      ...
-      */
+      pmanager->AddProcess(new G4MuIonisation, -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung, -1, 3, 3);
+      pmanager->AddProcess(new G4MuPairProduction, -1, 4, 4);
+
+
       // ---
     } else if (particleName == "pi-" ||
                particleName == "pi+"    ) {
@@ -183,22 +197,41 @@ void PhysicsList::ConstructDecay()
   // ********************************************************************************
 
   // il decadimento può avvenire atRest o PostStep(in flight?)
-  G4Decay* theDecayProcess = new G4Decay();
+  G4Decay* muDecayProcess = new G4DecayWithSpin();
 
   G4ParticleDefinition* muMinus= G4MuonMinus::MuonMinusDefinition();
   G4ParticleDefinition* muPlus = G4MuonPlus::MuonPlusDefinition();
 
 
   G4ProcessManager* muMinusManager = muMinus->GetProcessManager();
-  muMinusManager->AddProcess(theDecayProcess);
-  muMinusManager->SetProcessOrdering(theDecayProcess, idxPostStep);
-  muMinusManager->SetProcessOrdering(theDecayProcess, idxAtRest);
+  muMinusManager->AddProcess(muDecayProcess);
+  muMinusManager->SetProcessOrdering(muDecayProcess, idxPostStep);
+  muMinusManager->SetProcessOrdering(muDecayProcess, idxAtRest);
 
 
   G4ProcessManager* muPlusManager = muPlus->GetProcessManager();
-  muPlusManager->AddProcess(theDecayProcess);
-  muPlusManager->SetProcessOrdering(theDecayProcess, idxPostStep);
-  muPlusManager->SetProcessOrdering(theDecayProcess, idxAtRest);
+  muPlusManager->AddProcess(muDecayProcess);
+  muPlusManager->SetProcessOrdering(muDecayProcess, idxPostStep);
+  muPlusManager->SetProcessOrdering(muDecayProcess, idxAtRest);
+
+
+  // PARTE CHE AGGIUNGO IO FACOLTATIVA DI MIA SPONTANEA VOLONTA'
+  // G4DecayWithSpin* piDecayProcess = new G4DecayWithSpin();
+  //
+  // G4ParticleDefinition* piMinus= G4PionMinus::PionMinusDefinition();
+  // G4ParticleDefinition* piPlus = G4PionPlus::PionPlusDefinition();
+  //
+  // G4ProcessManager* piMinusManager = piMinus->GetProcessManager();
+  // piMinusManager->AddProcess(piDecayProcess);
+  // piMinusManager->SetProcessOrdering(piDecayProcess, idxPostStep);
+  // piMinusManager->SetProcessOrdering(piDecayProcess, idxAtRest);
+  //
+  //
+  // G4ProcessManager* piPlusManager = piPlus->GetProcessManager();
+  // piPlusManager->AddProcess(piDecayProcess);
+  // piPlusManager->SetProcessOrdering(piDecayProcess, idxPostStep);
+  // piPlusManager->SetProcessOrdering(piDecayProcess, idxAtRest);
+
 
  }
 

@@ -7,8 +7,13 @@
 # PyROOT script for displaying decay time distributions.
 
 import sys
-from sys import argv
-sys.path.append("/usr/local/bin/root/lib")
+from sys import argv,platform
+
+if platform == 'darwin':
+    rootPath = '/Applications/root_v6.25.01/lib/'
+else:
+    rootPath = '/usr/local/bin/root/lib'
+sys.path.append(rootPath)
 
 from ROOT import TCanvas, TFile, gROOT, gApplication
 

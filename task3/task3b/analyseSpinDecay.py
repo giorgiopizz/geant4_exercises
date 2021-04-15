@@ -8,7 +8,13 @@
 # doing some simple fits.
 
 import sys
-sys.path.append("/usr/local/bin/root/lib")
+from sys import argv,platform
+
+if platform == 'darwin':
+    rootPath = '/Applications/root_v6.25.01/lib/'
+else:
+    rootPath = '/usr/local/bin/root/lib'
+sys.path.append(rootPath)
 
 from math import *  #sqrt, exp, cos, pi
 
@@ -109,8 +115,11 @@ def calcLande(omega,bfield):
     magneton=q*hbar/(2.*m)  # 4.485e-26 * J/T
 
     g=omega*hbar/(magneton*bfield)
-
+    g_pdg = 11659209e-10*2+2
+    print 'Lande PDG g=', g_pdg
     print 'Lande g=',g
+    print 't = ',(g-g_pdg)/12e-10
+
     return g
 
 

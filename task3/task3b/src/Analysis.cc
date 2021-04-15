@@ -6,7 +6,7 @@
  */
 /**
  * @file
- * @brief implements singleton class Analysis 
+ * @brief implements singleton class Analysis
  */
 
 #include "Analysis.hh"
@@ -26,10 +26,10 @@ Analysis::Analysis() :
 {
 }
 
-Analysis::~Analysis() 
+Analysis::~Analysis()
 {}
 
-void Analysis::AddTrack( const G4Track * aTrack ) 
+void Analysis::AddTrack( const G4Track * aTrack )
 {
   if (histos.size()>3) {
     if (aTrack->GetDefinition()->GetPDGEncoding()!=11) return; // electrons
@@ -40,9 +40,9 @@ void Analysis::AddTrack( const G4Track * aTrack )
 
 
     histos[fDecayPosZ]->Fill(pos.z()/m);
-    histos[fDecayTime]->Fill(time/millisecond);
-    if (mom.z()>0) histos[fDecayTimeForward]->Fill(time/millisecond);
-    else histos[fDecayTimeBackward]->Fill(time/millisecond);
+    histos[fDecayTime]->Fill(time/microsecond);
+    if (mom.z()>0) histos[fDecayTimeForward]->Fill(time/microsecond);
+    else histos[fDecayTimeBackward]->Fill(time/microsecond);
   }
 }
 
@@ -104,11 +104,11 @@ void Analysis::EndOfRun(const G4Run* aRun)
 	char filename[256];
 	sprintf(filename,"run_%d.root",aRun->GetRunID() );
 	TFile* outfile = TFile::Open(filename,"recreate");
-	for (size_t i=0; i<histos.size();++i) 
+	for (size_t i=0; i<histos.size();++i)
 	  histos[i]->Write();
 	outfile->Close();
 	// delete histos
-	for (size_t i=0; i<histos.size();++i) 
+	for (size_t i=0; i<histos.size();++i)
 	  delete histos[i];
 	histos.clear();
 }

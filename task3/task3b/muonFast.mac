@@ -1,0 +1,17 @@
+/gps/particle mu-
+/gps/energy 1. GeV
+/gps/position 0. 0. 0. m
+/gps/direction 0. 0. 1.
+
+/run/setCut 1 km
+/process/eLoss/fluct false
+/process/eLoss/StepFunction 1 1 mm
+#/process/inactivate muMsc
+
+#/run/beamOn 10000
+
+/gps/polarization 0. 0. 1.
+#/run/beamOn 10000
+
+/gps/polarization 0. 0. -1.
+/run/beamOn 5000
