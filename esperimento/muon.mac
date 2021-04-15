@@ -1,13 +1,28 @@
+
+
 /gps/particle mu-
 /gps/pos/type Plane
 /gps/pos/shape Rectangle
-/gps/pos/centre 0. 40. 0. cm
-/gps/pos/halfx 500. cm
-/gps/pos/halfy 500. cm
+/gps/pos/centre 0. 20. 0. cm
+/gps/pos/halfx 80. cm
+/gps/pos/halfy 30. cm
+/gps/pos/rot1 1 0 0
+/gps/pos/rot2 0 0 1
+
+
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 1 0 0
 /gps/ang/type cos
+
+#/gps/ang/rot1 0. -1. 0.
+#/gps/ang/type planar
+#/gps/ang/mintheta 90 deg
+#/gps/ang/maxtheta 180 deg
+
+
 /gps/ene/type Lin
-/gps/ene/min 110 MeV
-/gps/ene/max 2 GeV
+/gps/ene/min 0 MeV
+/gps/ene/max 100 MeV
 /gps/ene/gradient 1.
 /gps/ene/intercept 1.
 
@@ -21,7 +36,7 @@
 /gps/polarization 0. 1. 0.
 
 # si può impostare cut più lungo
-/run/setCut 1 km
+#/run/setCut 1 km
 
 
-/run/beamOn 1
+/run/beamOn 100000

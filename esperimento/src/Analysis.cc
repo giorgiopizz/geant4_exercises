@@ -41,7 +41,7 @@ void Analysis::AddTrack( const G4Track * aTrack )
 
     histos[fDecayPosZ]->Fill(pos.z()/m);
     histos[fDecayTime]->Fill(time/microsecond);
-    if (mom.z()>0) histos[fDecayTimeForward]->Fill(time/microsecond);
+    if (mom.y()>0) histos[fDecayTimeForward]->Fill(time/microsecond);
     else histos[fDecayTimeBackward]->Fill(time/microsecond);
   }
 }
@@ -95,6 +95,7 @@ void Analysis::EndOfRun(const G4Run* aRun)
 
 	G4cout<<"================="<<G4endl;
 	G4cout<<"Summary for run: "<<aRun->GetRunID()<<G4endl;
+	G4cout << "secondari: " << thisEventSecondaries << G4endl;
 	G4cout<<"\t Event processed: "<<numEvents<<G4endl;
 	G4cout<<"\t Average number of secondaries: "<<thisRunTotSecondaries/numEvents<<G4endl;
 	G4cout<<"\t Average energy in EM calo: "<<G4BestUnit(thisRunTotEM/numEvents,"Energy")<<G4endl;
