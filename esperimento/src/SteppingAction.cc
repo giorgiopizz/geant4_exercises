@@ -40,8 +40,9 @@ void SteppingAction::UserSteppingAction( const G4Step * theStep ) {
 	//comparison is not efficient
 	const G4VTouchable* touchable = theStep->GetPreStepPoint()->GetTouchable();
 	G4int volCopyNum = touchable->GetVolume()->GetCopyNo();
-	if ( volCopyNum >=0 && volCopyNum  < 3 ) //EM calo step
+	if (volCopyNum >=0 && volCopyNum  < 3 ) //EM calo step
 	{
-		Analysis::GetInstance()->AddEDepEM( theStep->GetTotalEnergyDeposit() );
+		Analysis::GetInstance()->AddEDepEM(theStep->GetTotalEnergyDeposit(), volCopyNum);
+		//Analysis::GetInstance()->AddEDepEM( theStep->GetTotalEnergyDeposit() );
 	}
 }

@@ -12,16 +12,17 @@
 #include "Analysis.hh"
 #include "G4UnitsTable.hh"
 #include "G4Track.hh"
-
+#include "G4VProcess.hh"
+#include "G4ProcessType.hh"
 #include "TH1D.h"
 #include "TFile.h"
 
 Analysis* Analysis::singleton = 0;
 
 Analysis::Analysis() :
-	thisEventTotEM(0),
+	thisEventTotEM({0,0,0}),
 	thisEventSecondaries(0),
-	thisRunTotEM(0),
+	thisRunTotEM({0,0,0}),
 	thisRunTotSecondaries(0)
 {
 }
@@ -32,6 +33,20 @@ Analysis::~Analysis()
 void Analysis::AddTrack( const G4Track * aTrack )
 {
   if (histos.size()>3) {
+	const G4VTouchable* touchable = aTrack->GetTouchable();
+  	G4int volCopyNum = touchable->GetVolume()->GetCopyNo();
+
+	if (thisEventTotEM[volCopyNum]>3*MeV){
+		//lo scintillatore è stato attivato
+		G4cout << " scintillatore attivato " << volCopyNum << " da particella " << aTrack->GetDefinition()->GetPDGEncoding() << G4endl;
+		if ( aTrack->GetCreatorProcess()->GetProcessType()== fElectromagnetic && aTrack->GetParentID()==1){
+			G4cout << "attivato da mu-" << G4endl;
+		}
+		else if ( aTrack->GetCreatorProcess()->GetProcessType()== fDecay && aTrack->GetParentID()==1){
+			G4cout << "attivato da e-" << G4endl;
+		}
+	}
+
     if (aTrack->GetDefinition()->GetPDGEncoding()!=11) return; // electrons
 
     const G4ThreeVector & pos = aTrack->GetPosition();
@@ -50,13 +65,13 @@ void Analysis::PrepareNewEvent(const G4Event* /*anEvent*/)
 {
 	//Reset variables relative to this event
 	thisEventSecondaries = 0;
-	thisEventTotEM = 0;
+	for (int i=0;i<3;i++) thisEventTotEM[i]=0;
 }
 
 void Analysis::PrepareNewRun(const G4Run* /*aRun*/ )
 {
 	//Reset variables relative to the run
-	thisRunTotEM = 0;
+	for (int i=0;i<3;i++) thisRunTotEM[i]=0;
 	thisRunTotSecondaries = 0;
 
 	TH1D *h=0;
@@ -82,7 +97,7 @@ void Analysis::PrepareNewRun(const G4Run* /*aRun*/ )
 void Analysis::EndOfEvent(const G4Event* /*anEvent*/)
 {
 	//Accumulate over the run
-	thisRunTotEM += thisEventTotEM;
+	for (int i=0;i<3;i++) thisRunTotEM[i]+=thisEventTotEM[i];
 	thisRunTotSecondaries += thisEventSecondaries;
 	//Uncomment this line for more verbosity:
 	//	G4cout<<"Event: "<<anEvent->GetEventID() <<" Energy in EM calo: "<<G4BestUnit(thisEventTotEM,"Energy")<<" Secondaries: "<<thisEventSecondaries<<G4endl;
@@ -95,10 +110,10 @@ void Analysis::EndOfRun(const G4Run* aRun)
 
 	G4cout<<"================="<<G4endl;
 	G4cout<<"Summary for run: "<<aRun->GetRunID()<<G4endl;
-	G4cout << "secondari: " << thisEventSecondaries << G4endl;
+	G4cout << "  secondari:  " << thisEventSecondaries << G4endl;
 	G4cout<<"\t Event processed: "<<numEvents<<G4endl;
 	G4cout<<"\t Average number of secondaries: "<<thisRunTotSecondaries/numEvents<<G4endl;
-	G4cout<<"\t Average energy in EM calo: "<<G4BestUnit(thisRunTotEM/numEvents,"Energy")<<G4endl;
+	// G4cout<<"\t Average energy in EM calo: "<<G4BestUnit(thisRunTotEM/numEvents,"Energy")<<G4endl;
 	G4cout<<"================="<<G4endl;
 
 	//At the end of the run we can now save a ROOT file containing the histogram

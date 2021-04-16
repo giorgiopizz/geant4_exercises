@@ -32,15 +32,15 @@ public:
   void EndOfEvent(const G4Event* anEvent);
   void PrepareNewRun(const G4Run* aRun);
   void EndOfRun(const G4Run* aRun);
-  void AddEDepEM( G4double edep ) { thisEventTotEM += edep; }
+  void AddEDepEM( G4double edep, G4int volCopyNum) { thisEventTotEM[volCopyNum] += edep; }
   void AddSecondary( G4int num ) { thisEventSecondaries += num; }
   void AddTrack( const G4Track * aTrack );
 private:
   Analysis();
   static Analysis* singleton;
-  G4double thisEventTotEM;
+  G4double thisEventTotEM[3];
   G4int thisEventSecondaries;
-  G4double thisRunTotEM;
+  G4double thisRunTotEM[3];
   G4int thisRunTotSecondaries;
 
   std::vector<TH1*> histos;
