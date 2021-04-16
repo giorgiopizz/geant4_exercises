@@ -20,11 +20,12 @@
 Analysis* Analysis::singleton = 0;
 
 Analysis::Analysis() :
-	thisEventTotEM({0,0,0}),
 	thisEventSecondaries(0),
-	thisRunTotEM({0,0,0}),
-	thisRunTotSecondaries(0)
+	thisRunTotSecondaries(0),
+	activationTimeFirst(-1),
+	start(-1)
 {
+
 }
 
 Analysis::~Analysis()
@@ -36,29 +37,59 @@ void Analysis::AddTrack( const G4Track * aTrack )
 	const G4VTouchable* touchable = aTrack->GetTouchable();
   	G4int volCopyNum = touchable->GetVolume()->GetCopyNo();
 
-	if (thisEventTotEM[volCopyNum]>3*MeV){
-		//lo scintillatore è stato attivato
-		G4cout << " scintillatore attivato " << volCopyNum << " da particella " << aTrack->GetDefinition()->GetPDGEncoding() << G4endl;
-		if ( aTrack->GetCreatorProcess()->GetProcessType()== fElectromagnetic && aTrack->GetParentID()==1){
-			G4cout << "attivato da mu-" << G4endl;
+	// if (thisEventTotEM[volCopyNum-1]>3*MeV){
+		// if (volCopyNum==1 && activationTimeFirst==-1){
+		// 	activationTimeFirst = aTrack->GetGlobalTime();
+		// 	G4cout << " attivazione primo detector " << G4endl;
+		// }
+		// else if (volCopyNum==2 && start==-1 && activationTimeFirst!=-1 && (aTrack->GetGlobalTime()-activationTimeFirst)<60*ns){
+		// 	G4cout << " segnale start " << G4endl;
+		// 	start = aTrack->GetGlobalTime();
+		// }
+		// else if (start!=-1 && (volCopyNum==1 || volCopyNum==3)){
+		if (start!=-1){
+			G4cout << " segnale stop " << G4endl;
+			// if (aTrack->GetDefinition()->GetPDGEncoding()!=11) return; // electrons
+			const G4ThreeVector & pos = aTrack->GetPosition();
+		    const G4ThreeVector & mom = aTrack->GetMomentumDirection();
+		    G4double time = aTrack->GetGlobalTime();
+
+
+		    // histos[fDecayPosZ]->Fill(pos.z()/m);
+		    histos[fDecayTime]->Fill((time-start)/microsecond);
+		    // if (mom.y()>0) histos[fDecayTimeForward]->Fill(time/microsecond);
+		    // else histos[fDecayTimeBackward]->Fill(time/microsecond);
 		}
-		else if ( aTrack->GetCreatorProcess()->GetProcessType()== fDecay && aTrack->GetParentID()==1){
-			G4cout << "attivato da e-" << G4endl;
+	// }
+
+
+    // if (aTrack->GetDefinition()->GetPDGEncoding()!=11) return; // electrons
+	//
+    // const G4ThreeVector & pos = aTrack->GetPosition();
+    // const G4ThreeVector & mom = aTrack->GetMomentumDirection();
+    // G4double time = aTrack->GetGlobalTime();
+	//
+	//
+    // histos[fDecayPosZ]->Fill(pos.z()/m);
+    // histos[fDecayTime]->Fill(time/microsecond);
+    // if (mom.y()>0) histos[fDecayTimeForward]->Fill(time/microsecond);
+    // else histos[fDecayTimeBackward]->Fill(time/microsecond);
+  }
+}
+
+void Analysis::AddEDepEM( G4double edep, G4int volCopyNum, G4double time)
+{
+	thisEventTotEM[volCopyNum-1] += edep;
+	if (thisEventTotEM[volCopyNum-1]>3*MeV){
+		if (volCopyNum==1 && activationTimeFirst==-1){
+			activationTimeFirst = time;
+			G4cout << " attivazione primo detector " << G4endl;
+		}
+		else if (volCopyNum==2 && start==-1 && activationTimeFirst!=-1 && (time-activationTimeFirst)<100*ns){
+			G4cout << " segnale start " << G4endl;
+			start = time;
 		}
 	}
-
-    if (aTrack->GetDefinition()->GetPDGEncoding()!=11) return; // electrons
-
-    const G4ThreeVector & pos = aTrack->GetPosition();
-    const G4ThreeVector & mom = aTrack->GetMomentumDirection();
-    G4double time = aTrack->GetGlobalTime();
-
-
-    histos[fDecayPosZ]->Fill(pos.z()/m);
-    histos[fDecayTime]->Fill(time/microsecond);
-    if (mom.y()>0) histos[fDecayTimeForward]->Fill(time/microsecond);
-    else histos[fDecayTimeBackward]->Fill(time/microsecond);
-  }
 }
 
 void Analysis::PrepareNewEvent(const G4Event* /*anEvent*/)
@@ -66,6 +97,8 @@ void Analysis::PrepareNewEvent(const G4Event* /*anEvent*/)
 	//Reset variables relative to this event
 	thisEventSecondaries = 0;
 	for (int i=0;i<3;i++) thisEventTotEM[i]=0;
+	activationTimeFirst = -1;
+	start = -1;
 }
 
 void Analysis::PrepareNewRun(const G4Run* /*aRun*/ )

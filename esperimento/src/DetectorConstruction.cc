@@ -318,7 +318,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 				  "FirstSensor",		//its name
 				  logicWorld,		//its mother  volume
 				  false,			//no boolean operation
-				  0);			//copy number
+				  1);			//copy number
 
 
 	// 2nd Plane of Si tracker
@@ -329,7 +329,20 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 						  "SecondSensor",
 						  logicWorld,
 						  false,
-						  1);			//copy number
+						  2);			//copy number
+
+
+	//secondo scintillatore ruotato con campo magnetico
+	// G4RotationMatrix* rotationMatrix = new G4RotationMatrix();
+	//   rotationMatrix->rotateY(90.*deg);
+	//   physiSecondScint = new G4PVPlacement(rotationMatrix,//rm,
+	// 						  posSecondScint,
+	// 						  scintLogicSecond,
+	// 						  "SecondSensor",
+	// 						  logicWorld,
+	// 						  false,
+	// 						  1);			//copy number
+	// scintLogicSecond->SetFieldManager(GetLocalFieldManager(),true);
 
 	// 3rd Plane of Si tracker
 	physiThirdScint = new G4PVPlacement(0,
@@ -338,7 +351,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 				  "ThirdSensor",
 				  logicWorld,
 				  false,
-				  2);			//copy number
+				  3);			//copy number
 
 	// for ( int layerIdx = 0 ; layerIdx < hadCaloNumLayers ; ++layerIdx )
 	// {
@@ -401,7 +414,7 @@ G4FieldManager* DetectorConstruction::GetLocalFieldManager()
 {
   // pure magnetic field
   G4MagneticField* fMagneticField =
-    new G4UniformMagField(G4ThreeVector(3.5e-3*tesla, 0., 0.));
+    new G4UniformMagField(G4ThreeVector(0, 0., 20*gauss));
 
   // equation of motion with spin
   G4Mag_EqRhs* fEquation = new G4Mag_SpinEqRhs(fMagneticField);

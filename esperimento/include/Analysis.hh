@@ -32,7 +32,7 @@ public:
   void EndOfEvent(const G4Event* anEvent);
   void PrepareNewRun(const G4Run* aRun);
   void EndOfRun(const G4Run* aRun);
-  void AddEDepEM( G4double edep, G4int volCopyNum) { thisEventTotEM[volCopyNum] += edep; }
+  void AddEDepEM( G4double edep, G4int volCopyNum, G4double time);
   void AddSecondary( G4int num ) { thisEventSecondaries += num; }
   void AddTrack( const G4Track * aTrack );
 private:
@@ -43,6 +43,8 @@ private:
   G4double thisRunTotEM[3];
   G4int thisRunTotSecondaries;
 
+  G4double activationTimeFirst;
+  G4double start;
   std::vector<TH1*> histos;
   enum {
     fDecayPosZ=0,
