@@ -5,6 +5,7 @@
  */
 
 #include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4UImanager.hh"
 
 #include "G4Version.hh"
@@ -18,11 +19,14 @@
 #endif
 
 #include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "StackingAction.hh"
-#include "SteppingAction.hh"
-#include "EventAction.hh"
-#include "RunAction.hh"
+// #include "PrimaryGeneratorAction.hh"
+// #include "StackingAction.hh"
+// #include "SteppingAction.hh"
+// #include "EventAction.hh"
+// #include "RunAction.hh"
+
+#include "MyActionInitialization.hh"
+
 
 #include "PhysicsList.hh"
 #include "QGSP_BERT.hh"
@@ -41,9 +45,16 @@
 int main(int argc,char** argv)
 {
   // Run manager
-  G4RunManager * runManager = new G4RunManager();
-
-  // mandatory Initialization classes 
+  // G4RunManager * runManager = new G4RunManager();
+  #ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(2*(G4Threading::G4GetNumberOfCores()));
+  G4cout << "Multithreaded" << G4endl;
+  #else
+  G4RunManager* runManager = new G4RunManager;
+  G4cout << "Single threaded" << G4endl;
+  #endif
+  // mandatory Initialization classes
   G4VUserDetectorConstruction* detector = new DetectorConstruction();
   runManager->SetUserInitialization(detector);
 
@@ -51,45 +62,46 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(physics);
 
   // mandatory User Action classes
-  G4VUserPrimaryGeneratorAction* gen_action = new PrimaryGeneratorAction();
-  runManager->SetUserAction(gen_action);
+  // G4VUserPrimaryGeneratorAction* gen_action = new PrimaryGeneratorAction();
+  // runManager->SetUserAction(gen_action);
 
 
-  //Optional User Action classes
-  //Stacking Action
-  StackingAction* aStackingAction = new StackingAction();
-  runManager->SetUserAction(aStackingAction);
-  //Stepping Action
-  SteppingAction* aSteppingAction = new SteppingAction();
-  runManager->SetUserAction(aSteppingAction);
-  //Event action (handles for beginning / end of event)
-  EventAction* anEventAction = new EventAction();
-  runManager->SetUserAction( anEventAction );
+  // //Optional User Action classes
+  // //Stacking Action
+  // StackingAction* aStackingAction = new StackingAction();
+  // runManager->SetUserAction(aStackingAction);
+  // //Stepping Action
+  // SteppingAction* aSteppingAction = new SteppingAction();
+  // runManager->SetUserAction(aSteppingAction);
+  // //Event action (handles for beginning / end of event)
+  // EventAction* anEventAction = new EventAction();
+  // runManager->SetUserAction( anEventAction );
 
-  //Run action (handles for beginning / end of event)
-  RunAction* aRunAction = new RunAction();
-  runManager->SetUserAction( aRunAction );
+  // //Run action (handles for beginning / end of event)
+  // RunAction* aRunAction = new RunAction();
+  // runManager->SetUserAction( aRunAction );
 
+  runManager->SetUserInitialization(new MyActionInitialization());
 
   // Initialize G4 kernel
   runManager->Initialize();
-      
+
   //Initilize the visualization manager
   G4VisManager* visManager = new G4VisExecutive();
   visManager->Initialize();
-     
+
   // Get the pointer to the User Interface manager
   //
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();
 
-  if (argc!=1) {  // batch mode  
+  if (argc!=1) {  // batch mode
 	  //command line contains name of the macro to execute
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
   }
   else {           // interactive mode : define UI session
-     
+
 #if  G4VERSION_NUMBER>=930
 	  //New since G4 9.3: UI executive setups up
 	  //correct UI depending on env variables
