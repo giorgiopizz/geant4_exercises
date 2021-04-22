@@ -33,6 +33,10 @@
 
 #include "G4RadioactiveDecayPhysics.hh"
 
+
+// #include "G4PhysListFactory.hh"
+// #include "G4VModularPhysicsList.hh"
+// #include "G4GenericPhysicsList.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
@@ -60,6 +64,29 @@ int main(int argc,char** argv)
 
   G4VUserPhysicsList* physics = new PhysicsList();
   runManager->SetUserInitialization(physics);
+
+  // G4PhysListFactory factory;
+  // G4VModularPhysicsList* phys = nullptr;
+  // phys = factory.GetReferencePhysList("FTFP_BERT");
+
+// G4VModularPhysicsList* physList = nullptr;
+//   std::vector<G4String>* myConstructors = new std::vector<G4String>;
+//
+//     myConstructors->push_back("G4EmStandardPhysics");
+//     myConstructors->push_back("G4EmExtraPhysics");
+//     myConstructors->push_back("G4DecayPhysics");
+//     myConstructors->push_back("G4HadronElasticPhysics");
+//     myConstructors->push_back("G4HadronPhysicsFTFP_BERT");
+//     myConstructors->push_back("G4StoppingPhysics");
+//     myConstructors->push_back("G4IonPhysics");
+//     myConstructors->push_back("G4NeutronTrackingCut");
+//
+//     physList = new G4GenericPhysicsList(myConstructors);
+//
+//   runManager->SetUserInitialization(physList);
+
+
+  // run->SetPhysicsList(phys);
 
   // mandatory User Action classes
   // G4VUserPrimaryGeneratorAction* gen_action = new PrimaryGeneratorAction();

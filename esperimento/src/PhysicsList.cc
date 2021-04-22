@@ -171,6 +171,7 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MuIonisation, -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung, -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction, -1, 4, 4);
+      if(particleName=="mu-")   pmanager->AddProcess(new G4MuonMinusBoundDecay, -1, 5, 4);
 
 
       // ---
