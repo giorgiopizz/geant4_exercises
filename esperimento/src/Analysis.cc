@@ -49,7 +49,7 @@ void Analysis::AddTrack( const G4Track * aTrack )
 		// else if (start!=-1 && (volCopyNum==1 || volCopyNum==3)){
 		if (start!=-1){
 			// G4cout << " segnale stop " << G4endl;
-			if (aTrack->GetDefinition()->GetPDGEncoding()!=11 && aTrack->GetDefinition()->GetPDGEncoding()!=22) return; // electrons
+			if (abs(aTrack->GetDefinition()->GetPDGEncoding())!=11 && aTrack->GetDefinition()->GetPDGEncoding()!=22) return; // electrons
 			const G4ThreeVector & pos = aTrack->GetPosition();
 		    const G4ThreeVector & mom = aTrack->GetMomentumDirection();
 		    G4double time = aTrack->GetGlobalTime();

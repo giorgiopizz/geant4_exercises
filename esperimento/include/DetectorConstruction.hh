@@ -79,6 +79,10 @@ private:
   G4Material* air;
 
   G4Material* plastic;
+
+  G4Material* NaCl;
+  G4Material* alluminium;
+
   //@}
 
   //! \name global mother volume
@@ -104,11 +108,18 @@ private:
   G4double scintLength;
   G4double scintWidth;
   G4double scintHeight;
-  G4double scintSeparation; //separation between scintillators
+
 
   G4ThreeVector posFirstScint;
   G4ThreeVector posSecondScint;
   G4ThreeVector posThirdScint;
+
+
+  G4double materialLenght;
+  G4double materialWidth;
+  G4double materialHeight;
+  G4ThreeVector posMaterial;
+
   //@}
 
   //! \name Geometry em calo
@@ -129,7 +140,7 @@ private:
   G4VPhysicalVolume* physiFirstScint;
   G4VPhysicalVolume* physiSecondScint;
   G4VPhysicalVolume* physiThirdScint;
-
+  G4VPhysicalVolume* Material;
   //@}
   //! \name Parameters for had calo
   //@{

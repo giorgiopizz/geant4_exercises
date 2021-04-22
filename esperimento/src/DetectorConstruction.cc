@@ -6,7 +6,7 @@
 
 #include "DetectorConstruction.hh"
 //#include "DetectorMessenger.hh"
-
+#include "G4Element.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -23,6 +23,8 @@
 
 //#include "SensitiveDetector.hh"
 #include "G4SDManager.hh"
+
+// #define CERBERO_SOPRA
 
 DetectorConstruction::DetectorConstruction()
 {
@@ -47,7 +49,13 @@ void DetectorConstruction::DefineMaterials()
 	// Scintillator
 	// (PolyVinylToluene, C_9H_10)
     plastic = man->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+	G4Element * elNa = new G4Element("Sodium", "Na", 11, 22.98977*g/mole);
+	G4Element * elCl = new G4Element("Chlorine", "Cl", 17, 35.446*g/mole);
+	NaCl = new G4Material("NaCl", 2.16*g/cm3, 2);
+	NaCl->AddElement(elNa, 1);
+	NaCl->AddElement(elCl, 1);
 
+ 	alluminium = man->FindOrBuildMaterial("G4_Al");
 
 	// vacuum  = man->FindOrBuildMaterial("G4_Galactic");
 
@@ -79,13 +87,39 @@ void DetectorConstruction::ComputeParameters()
 
 	// Scintillators
 
-	scintLength = 80.*cm;
-	scintWidth = 30.*cm;
-	scintHeight = 4.*cm;
-	scintSeparation = 4.*cm; //separation between scintillators
-	posFirstScint  = G4ThreeVector(0., (scintSeparation + scintHeight)*2 , 0.);
-	posSecondScint = G4ThreeVector(0., scintSeparation + scintHeight, 0.);
-	posThirdScint  = G4ThreeVector(0., 0., 0.);
+	#ifdef CERBERO_SOPRA
+
+		// Cerbero sopra
+		scintLength = 80.*cm;
+		scintWidth = 30.*cm;
+		scintHeight = 4.*cm;
+		G4double scintSeparation23 = 3.*cm; //separation between lower scintillators
+		G4double scintSeparation12 = 1.5*cm;//separation between upper scintillators
+		// look at note for explanation of posFirstScint y compontent
+		posFirstScint  = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight + scintSeparation12 + scintHeight/4, 0.);
+		posSecondScint = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight/2, 0.);
+		posThirdScint  = G4ThreeVector(0., 0., 0.);
+
+	#else
+
+
+
+		// Cerbero in mezzo
+
+		scintLength = 80.*cm;
+		scintWidth = 30.*cm;
+		scintHeight = 4.*cm;
+		G4double scintSeparation23 = 8.*cm; //separation between lower scintillators
+		G4double scintSeparation12 = 1.*cm;//separation between upper scintillators
+		posFirstScint  = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight/2 + scintSeparation12 + scintHeight/2, 0.);
+		posSecondScint = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight/4, 0.);
+		posThirdScint  = G4ThreeVector(0., 0., 0.);
+
+		materialLenght = scintLength;
+		materialWidth = scintWidth;
+		materialHeight = scintSeparation23;
+		posMaterial    = G4ThreeVector(0., scintHeight/2 + scintSeparation23/2, 0.);
+	#endif
 
 	// // ** em calo **
 	// emCaloCentralCrystalWidth = 22*mm;
@@ -280,38 +314,60 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 {
-	// G4double halfHadCaloHalfZ = (hadCaloFeThickness+hadCaloLArThickness)*hadCaloNumLayers/2;
 
-	G4Box* scintSolidFirst = new G4Box( "scintFirst",//its name
+	// G4double halfHadCaloHalfZ = (hadCaloFeThickness+hadCaloLArThickness)*hadCaloNumLayers/2;
+	G4Box* scintSmallSolid = new G4Box( "scintSmallSolid",//its name
 										scintLength/2, //halfX
 										scintHeight/4,//halfY
 										scintWidth/2); //halfZ
-	G4LogicalVolume* scintLogicFirst = new G4LogicalVolume( scintSolidFirst,//its solid
-														 plastic,//its material
-														 "scintLogicFirst");//its name
-
-	G4Box* scintSolidSecond = new G4Box( "scintSecond",//its name
+	G4Box* scintBigSolid= new G4Box( "scintBigSolid",//its name
 										scintLength/2, //halfX
 										scintHeight/2,//halfY
 										scintWidth/2); //halfZ
-	G4LogicalVolume* scintLogicSecond = new G4LogicalVolume( scintSolidSecond,//its solid
-														 plastic,//its material
-														 "scintLogicSecond");//its name
+	#ifdef CERBERO_SOPRA
 
-	 G4LogicalVolume* scintLogicThird = new G4LogicalVolume( scintSolidSecond,//its solid
-	 													 plastic,//its material
-	 													 "scintLogicThird");//its name
+		G4LogicalVolume* scintLogicFirst = new G4LogicalVolume( scintSmallSolid,//its solid
+															 plastic,//its material
+															 "scintLogicFirst");//its name
 
 
-	//We now make layers of LAr and add them to the hadronic calo logic
-	// G4Tubs* hadLayerSolid = new G4Tubs( "HadCaloLayerSolid", 0 , hadCaloRadius , hadCaloLArThickness/2, 0, CLHEP::twopi);
-	// G4LogicalVolume* hadLayerLogic = new G4LogicalVolume(hadLayerSolid,lar,"HadLayerLogic");
-	//Translation of one Layer with respect previous Layer
-	// G4ThreeVector absorberLayer(0,0,hadCaloFeThickness);
-	// G4ThreeVector activeLayer(0,0,hadCaloLArThickness);
-	// G4int hadCaloCopyNum = 1000;
-	// G4int layerCopyNum = hadCaloCopyNum;
+		G4LogicalVolume* scintLogicSecond = new G4LogicalVolume( scintBigSolid,//its solid
+															 plastic,//its material
+															 "scintLogicSecond");//its name
 
+		 G4LogicalVolume* scintLogicThird = new G4LogicalVolume( scintBigSolid,//its solid
+		 													 plastic,//its material
+		 													 "scintLogicThird");//its name
+
+	#else
+		G4LogicalVolume* scintLogicFirst = new G4LogicalVolume( scintBigSolid,//its solid
+															 plastic,//its material
+															 "scintLogicFirst");//its name
+
+		G4LogicalVolume* scintLogicSecond = new G4LogicalVolume( scintSmallSolid,//its solid
+															 plastic,//its material
+															 "scintLogicSecond");//its name
+
+		 G4LogicalVolume* scintLogicThird = new G4LogicalVolume( scintBigSolid,//its solid
+															 plastic,//its material
+															 "scintLogicThird");//its name
+		 G4Box* materialSolid= new G4Box( "material",//its name
+												materialLenght/2, //halfX
+												materialHeight/2,//halfY
+												materialWidth/2); //halfZ
+		G4LogicalVolume* materialLogic = new G4LogicalVolume( materialSolid,//its solid
+															NaCl,//its material
+															"material_for_decay");//its name
+		Material = new G4PVPlacement(0,//rm,
+							  posMaterial,
+							  materialLogic,
+							  "physical_material_for_decay",
+							  logicWorld,
+							  false,
+							  4);			//copy number
+		materialLogic->SetVisAttributes(new G4VisAttributes(G4Colour(0,0,1)));
+
+	#endif
 	physiFirstScint = new G4PVPlacement(0,	//no rotation
 				  posFirstScint,
 				  scintLogicFirst,		//its logical volume
@@ -352,7 +408,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 				  logicWorld,
 				  false,
 				  3);			//copy number
-
 	// for ( int layerIdx = 0 ; layerIdx < hadCaloNumLayers ; ++layerIdx )
 	// {
 	// 	G4ThreeVector position = (layerIdx+1)*absorberLayer + (layerIdx+0.5)*activeLayer;
