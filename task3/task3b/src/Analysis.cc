@@ -39,7 +39,7 @@ void Analysis::AddTrack( const G4Track * aTrack )
     G4double time = aTrack->GetGlobalTime();
 
 
-    histos[fDecayPosZ]->Fill(pos.z()/m);
+    histos[fDecayPosZ]->Fill(pos.z()/mm);
     histos[fDecayTime]->Fill(time/microsecond);
     if (mom.z()>0) histos[fDecayTimeForward]->Fill(time/microsecond);
     else histos[fDecayTimeBackward]->Fill(time/microsecond);
