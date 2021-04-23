@@ -9,6 +9,7 @@
 */
 
 #include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -25,7 +26,8 @@ It is responsible for
 
 \sa ConstructParticle(), ConstructProcess(), SetCuts()
 */
-class PhysicsList: public G4VUserPhysicsList
+// class PhysicsList: public G4VUserPhysicsList
+class PhysicsList: public G4VModularPhysicsList
 {
 public:
   //! Constructor

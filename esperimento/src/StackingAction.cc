@@ -44,7 +44,12 @@ StackingAction::ClassifyNewTrack( const G4Track * aTrack ) {
     //     }
     // }
 
-    if ( aTrack->GetCreatorProcess()->GetProcessType()==fDecay && (volCopyNum==1 || volCopyNum==3)) {
+    if ( (aTrack->GetCreatorProcess()->GetProcessType()==fDecay ||
+    aTrack->GetCreatorProcess()->GetProcessType()==fElectromagnetic ||
+    aTrack->GetCreatorProcess()->GetProcessType()==fUserDefined ||
+    aTrack->GetCreatorProcess()->GetProcessType()==fHadronic
+    )&& (volCopyNum==1 || volCopyNum==3)) {
+
         // if (volCopyNum>=0 && volCopyNum<3 && (aTrack->GetCreatorProcess()->GetProcessType()==fDecay || aTrack->GetCreatorProcess()->GetProcessType()== fElectromagnetic)) {
       // G4cout << "va aggiunta " << volCopyNum << G4endl;
       // G4cout << "pos. mome" << aTrack->GetPosition() << " " << aTrack->GetGlobalTime() << G4endl;

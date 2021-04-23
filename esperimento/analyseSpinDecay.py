@@ -55,6 +55,26 @@ myfit.SetParameter(1,200.)
 myfit.SetLineColor(kRed)
 myfit.SetLineWidth(1)
 
+def decay_double(x,par):
+    return par[0]*exp(-x[0]/par[1])+par[2]*exp(-x[0]/par[3])+par[4]
+
+myfit2 = TF1('myfit2', decay_double, 0., 20 ,5)
+myfit2.SetParName(0,'#N_mu^+')
+myfit2.SetParameter(0,10000.)
+myfit2.SetParName(1,'#tau_mu^+')
+myfit2.FixParameter(1,2.2)
+myfit2.SetParName(2,'#N_mu^-')
+myfit2.SetParameter(2,10000)
+myfit2.SetParName(3,'#tau_mu^-')
+myfit2.SetParameter(3,0.7)
+myfit2.SetParName(4,'Bkg')
+myfit2.FixParameter(4,0)
+
+# set fit line style
+myfit2.SetLineColor(kRed)
+myfit2.SetLineWidth(1)
+
+
 # set fit range, parameter names and start values
 myspinfit = TF1('myspinfit', spinDecay, 0., 20.e3,5)
 myspinfit.SetParName(0,'A')
@@ -104,25 +124,25 @@ def analyseDecay(fname):
     file.decayTime.Fit(myfit)
     c1.Modified()
     c1.Update()
-
-    c2 = TCanvas('c2','Decay Position',250,20,700,500)
-    file.decayPos.Draw()
-
-    # print out results
-    print 'average Decay time =',file.decayTime.GetMean(),'us'
-    print 'fitted Decay time = (',myfit.GetParameter('tau'),'+-',myfit.GetParError(1),') us'
-    print 'average Decay position =',file.decayPos.GetMean(),'mm'
-
-    # draw histogram and fit
-    c3 = TCanvas('c3','Decay Time Forward',30,50,700,500)
-    file.decayTimeForward.Draw()
-    myspinfit.FixParameter(0,myfit.GetParameter('A')/2.)
-    myspinfit.FixParameter(1,myfit.GetParameter('tau'))
-    file.decayTimeForward.Fit(myspinfit)
-    c3.Modified()
-    c3.Update()
-
-    calcLande(myspinfit.GetParameter('omega'),3.5e-3)  # tesla
+    #
+    # c2 = TCanvas('c2','Decay Position',250,20,700,500)
+    # file.decayPos.Draw()
+    #
+    # # print out results
+    # print 'average Decay time =',file.decayTime.GetMean(),'us'
+    # print 'fitted Decay time = (',myfit.GetParameter('tau'),'+-',myfit.GetParError(1),') us'
+    # print 'average Decay position =',file.decayPos.GetMean(),'mm'
+    #
+    # # draw histogram and fit
+    # c3 = TCanvas('c3','Decay Time Forward',30,50,700,500)
+    # file.decayTimeForward.Draw()
+    # myspinfit.FixParameter(0,myfit.GetParameter('A')/2.)
+    # myspinfit.FixParameter(1,myfit.GetParameter('tau'))
+    # file.decayTimeForward.Fit(myspinfit)
+    # c3.Modified()
+    # c3.Update()
+    #
+    # calcLande(myspinfit.GetParameter('omega'),3.5e-3)  # tesla
 
     # asymmetry_histo = TH1D('asymmetry', 'Asymmetry U-D/(U+D)', 200, 0, 20)
     x = []
