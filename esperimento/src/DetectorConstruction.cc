@@ -24,7 +24,7 @@
 //#include "SensitiveDetector.hh"
 #include "G4SDManager.hh"
 
-// #define CERBERO_SOPRA
+#define CERBERO_SOPRA
 
 DetectorConstruction::DetectorConstruction()
 {
@@ -379,26 +379,26 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 
 	// 2nd Plane of Si tracker
 
-	physiSecondScint = new G4PVPlacement(0,//rm,
-						  posSecondScint,
-						  scintLogicSecond,
-						  "SecondSensor",
-						  logicWorld,
-						  false,
-						  2);			//copy number
+	// physiSecondScint = new G4PVPlacement(0,//rm,
+	// 					  posSecondScint,
+	// 					  scintLogicSecond,
+	// 					  "SecondSensor",
+	// 					  logicWorld,
+	// 					  false,
+	// 					  2);			//copy number
 
 
 	//secondo scintillatore ruotato con campo magnetico
-	// G4RotationMatrix* rotationMatrix = new G4RotationMatrix();
-	//   rotationMatrix->rotateY(90.*deg);
-	//   physiSecondScint = new G4PVPlacement(rotationMatrix,//rm,
-	// 						  posSecondScint,
-	// 						  scintLogicSecond,
-	// 						  "SecondSensor",
-	// 						  logicWorld,
-	// 						  false,
-	// 						  1);			//copy number
-	// scintLogicSecond->SetFieldManager(GetLocalFieldManager(),true);
+	G4RotationMatrix* rotationMatrix = new G4RotationMatrix();
+	  rotationMatrix->rotateY(90.*deg);
+	  physiSecondScint = new G4PVPlacement(rotationMatrix,//rm,
+							  posSecondScint,
+							  scintLogicSecond,
+							  "SecondSensor",
+							  logicWorld,
+							  false,
+							  1);			//copy number
+	scintLogicSecond->SetFieldManager(GetLocalFieldManager(),true);
 
 	// 3rd Plane of Si tracker
 	physiThirdScint = new G4PVPlacement(0,
@@ -422,13 +422,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 	// 						     false,
 	// 						     hadCaloCopyNum);//copy number
 
-	// ********************************************************************************
-	// Task 3.b - Exercise 8
-	//  - Uncomment the line below to add a small uniform magnetic field (35 mT)
-	//    to the detector volume
-	// ********************************************************************************
-	// scintLogic->SetFieldManager(GetLocalFieldManager(),true);
-	// ---
+
 
 	G4Colour green(0,1,0);
 	G4Colour white(1,1,1);
