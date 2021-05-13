@@ -58,14 +58,19 @@ myfit.SetLineWidth(1)
 def decay_double(x,par):
     return par[0]*exp(-x[0]/par[1])+par[2]*exp(-x[0]/par[3])+par[4]
 
-myfit2 = TF1('myfit2', decay_double, 0., 20 ,5)
+myfit2 = TF1('myfit2', decay_double, 0.2, 20 ,5)
 myfit2.SetParName(0,'#N_mu^+')
 myfit2.SetParameter(0,10000.)
+myfit2.SetParLimits(0,0,1000000)
 myfit2.SetParName(1,'#tau_mu^+')
-myfit2.FixParameter(1,2.2)
+# myfit2.FixParameter(1,2.2)
+myfit2.SetParameter(1,2.197)
+myfit2.SetParLimits(1,1.95,2.25)
 myfit2.SetParName(2,'#N_mu^-')
+myfit2.SetParLimits(2,0,1000000)
 myfit2.SetParameter(2,10000)
 myfit2.SetParName(3,'#tau_mu^-')
+myfit2.SetParLimits(3,0,3)
 myfit2.SetParameter(3,0.7)
 myfit2.SetParName(4,'Bkg')
 myfit2.FixParameter(4,0)
@@ -121,7 +126,7 @@ def analyseDecay(fname):
     # draw histogram and fit
     c1 = TCanvas('c1','Decay Time',10,10,700,500)
     file.decayTime.Draw()
-    file.decayTime.Fit(myfit2)
+    file.decayTime.Fit(myfit2, "R")
     c1.Modified()
     c1.Update()
     #
@@ -145,17 +150,17 @@ def analyseDecay(fname):
     # calcLande(myspinfit.GetParameter('omega'),3.5e-3)  # tesla
 
     # asymmetry_histo = TH1D('asymmetry', 'Asymmetry U-D/(U+D)', 200, 0, 20)
-    x = []
-    y = []
-    for i in range(100):
-        U = file.decayTimeForward.GetBinContent(i)
-        D = file.decayTimeBackward.GetBinContent(i)
-        x.append(file.decayTimeForward.GetBinCenter(i))
-        try:
-            v = (U-D)/(U+D)
-        except:
-            v= 0
-        y.append(v)
+    # x = []
+    # y = []
+    # for i in range(100):
+    #     U = file.decayTimeForward.GetBinContent(i)
+    #     D = file.decayTimeBackward.GetBinContent(i)
+    #     x.append(file.decayTimeForward.GetBinCenter(i))
+    #     try:
+    #         v = (U-D)/(U+D)
+    #     except:
+    #         v= 0
+    #     y.append(v)
         # asymmetry_histo.SetBinContent(i, x)
 
     #

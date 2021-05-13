@@ -47,14 +47,14 @@ void Analysis::AddTrack( const G4Track * aTrack )
 		// 	start = aTrack->GetGlobalTime();
 		// }
 		// else if (start!=-1 && (volCopyNum==1 || volCopyNum==3)){
-		if (start!=-1){
+		if (start!=-1 && (aTrack->GetGlobalTime()-start)>100*ns){
 			// G4cout << " segnale stop " << G4endl;
 			// if (abs(aTrack->GetDefinition()->GetPDGEncoding())!=11 && aTrack->GetDefinition()->GetPDGEncoding()!=22) return; // electrons
 			const G4ThreeVector & pos = aTrack->GetPosition();
 		    const G4ThreeVector & mom = aTrack->GetMomentumDirection();
 		    G4double time = aTrack->GetGlobalTime();
 
-
+			decays++;
 		    histos[fDecayPosZ]->Fill(pos.y()/m);
 		    histos[fDecayTime]->Fill((time-start)/microsecond);
 		    if (mom.y()>0) histos[fDecayTimeForward]->Fill(time/microsecond);
@@ -117,15 +117,15 @@ void Analysis::PrepareNewRun(const G4Run* /*aRun*/ )
 	h->GetYaxis()->SetTitle("events");
 	h->GetXaxis()->SetTitle("t_{decay} #mus");
 	h->StatOverflows();
-	histos.push_back(h=new TH1D("decayTime","Time of Decay",200,0,20 ) ); //microsecond
+	histos.push_back(h=new TH1D("decayTime","Time of Decay",200,0,11 ) ); //microsecond
 	h->GetYaxis()->SetTitle("events");
 	h->GetXaxis()->SetTitle("t_{decay} #mus");
 	h->StatOverflows();
-	histos.push_back(h=new TH1D("decayTimeForward","Time of Decay [Forward electron]",200,0,20) ); // microsecond
+	histos.push_back(h=new TH1D("decayTimeForward","Time of Decay [Forward electron]",200,0,11) ); // microsecond
 	h->GetYaxis()->SetTitle("forward events");
 	h->GetXaxis()->SetTitle("t_{decay} #mus");
 	h->StatOverflows();
-	histos.push_back(h=new TH1D("decayTimeBackward","Time of Decay [Backward electron]",200,0,20) ); // microsecond
+	histos.push_back(h=new TH1D("decayTimeBackward","Time of Decay [Backward electron]",200,0,11) ); // microsecond
 	h->GetYaxis()->SetTitle("backward events");
 	h->GetXaxis()->SetTitle("t_{decay} #mus");
 	h->StatOverflows();

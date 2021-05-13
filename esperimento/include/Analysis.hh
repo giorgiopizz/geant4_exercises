@@ -35,6 +35,7 @@ public:
   void AddEDepEM( G4double edep, G4int volCopyNum, G4double time);
   void AddSecondary( G4int num ) { thisEventSecondaries += num; }
   void AddTrack( const G4Track * aTrack );
+  int numDecays() { return decays;}
 private:
   Analysis();
   static Analysis* singleton;
@@ -46,6 +47,8 @@ private:
   G4double activationTimeFirst;
   G4double start;
   std::vector<TH1*> histos;
+  int decays =0;
+
   enum {
     fDecayPosZ=0,
     fDecayTime=1,

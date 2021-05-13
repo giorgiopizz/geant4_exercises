@@ -24,7 +24,7 @@
 //#include "SensitiveDetector.hh"
 #include "G4SDManager.hh"
 
-#define CERBERO_SOPRA
+// #define CERBERO_SOPRA
 
 DetectorConstruction::DetectorConstruction()
 {
@@ -389,16 +389,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 
 
 	//secondo scintillatore ruotato con campo magnetico
-	G4RotationMatrix* rotationMatrix = new G4RotationMatrix();
-	  rotationMatrix->rotateY(90.*deg);
-	  physiSecondScint = new G4PVPlacement(rotationMatrix,//rm,
+	// G4RotationMatrix* rotationMatrix = new G4RotationMatrix();
+	//   rotationMatrix->rotateY(90.*deg);
+	  // physiSecondScint = new G4PVPlacement(rotationMatrix,//rm,
+	  physiSecondScint = new G4PVPlacement(0,
 							  posSecondScint,
 							  scintLogicSecond,
 							  "SecondSensor",
 							  logicWorld,
 							  false,
-							  1);			//copy number
-	scintLogicSecond->SetFieldManager(GetLocalFieldManager(),true);
+							  2);			//copy number
+	// scintLogicSecond->SetFieldManager(GetLocalFieldManager(),true);
 
 	// 3rd Plane of Si tracker
 	physiThirdScint = new G4PVPlacement(0,

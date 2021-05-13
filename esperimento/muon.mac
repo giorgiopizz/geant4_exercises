@@ -70,4 +70,4 @@
 #/run/setCut 1 km
 
 
-/run/beamOn 1000000
+/run/beamOn 100000

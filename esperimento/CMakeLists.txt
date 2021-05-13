@@ -57,6 +57,7 @@ set(AnaEx02_SCRIPTS
     analyse.py
     analyseDecay.py
     analyseSpinDecay.py
+    analyseMaterialDecay.py
     piDecay.mac
     muonSpin.mac
     muonFast.mac
