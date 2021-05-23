@@ -56,8 +56,8 @@ StackingAction::ClassifyNewTrack( const G4Track * aTrack ) {
     // aTrack->GetCreatorProcess()->GetProcessType()==fUserDefined ||
     // aTrack->GetCreatorProcess()->GetProcessType()==fHadronic
     // )&& (volCopyNum==1 || volCopyNum==3)) {
-    // if ((aTrack->GetCreatorProcess()->GetProcessType()==fDecay ||aTrack->GetCreatorProcess()->GetProcessType()==fHadronic) && (volCopyNum==1 || volCopyNum==3)) {
-    if    (volCopyNum==1 || volCopyNum==3){
+    if ((aTrack->GetCreatorProcess()->GetProcessType()==fDecay ||aTrack->GetCreatorProcess()->GetProcessType()==fHadronic) && (volCopyNum==1 || volCopyNum==3)) {
+    // if    (volCopyNum==1 || volCopyNum==3){
     // if ((aTrack->GetCreatorProcess()->GetProcessType()==fDecay) && (  volCopyNum==1 || volCopyNum==3)){
         // if (volCopyNum>=0 && volCopyNum<3 && (aTrack->GetCreatorProcess()->GetProcessType()==fDecay || aTrack->GetCreatorProcess()->GetProcessType()== fElectromagnetic)) {
       // G4cout << "va aggiunta " << volCopyNum << G4endl;

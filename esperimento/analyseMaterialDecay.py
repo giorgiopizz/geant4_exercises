@@ -55,29 +55,7 @@ myfit.SetParameter(1,200.)
 myfit.SetLineColor(kRed)
 myfit.SetLineWidth(1)
 
-def decay_double(x,par):
-    return par[0]*exp(-x[0]/par[1])+par[2]*exp(-x[0]/par[3])+par[4]
 
-myfit2 = TF1('myfit2', decay_double, 0.2, 20 ,5)
-myfit2.SetParName(0,'#N_mu^+')
-myfit2.SetParameter(0,10000.)
-myfit2.SetParLimits(0,0,1000000)
-myfit2.SetParName(1,'#tau_mu^+')
-# myfit2.FixParameter(1,2.2)
-myfit2.SetParameter(1,2.197)
-myfit2.SetParLimits(1,1.95,2.25)
-myfit2.SetParName(2,'#N_mu^-')
-myfit2.SetParLimits(2,0,1000000)
-myfit2.SetParameter(2,10000)
-myfit2.SetParName(3,'#tau_mu^-')
-myfit2.SetParLimits(3,0,3)
-myfit2.SetParameter(3,0.7)
-myfit2.SetParName(4,'Bkg')
-myfit2.FixParameter(4,0)
-
-# set fit line style
-myfit2.SetLineColor(kRed)
-myfit2.SetLineWidth(1)
 
 
 # set fit range, parameter names and start values
@@ -126,6 +104,31 @@ def analyseDecay(fname):
     # draw histogram and fit
     c1 = TCanvas('c1','Decay Time',10,10,700,500)
     file.decayTime.Draw()
+    def decay_double(x,par):
+        return par[0]*exp(-x[0]/par[1])+par[2]*exp(-x[0]/par[3])+par[4]
+
+    myfit2 = TF1('myfit2', decay_double, 0.2, 20 ,5)
+    myfit2.SetParName(0,'#N_mu^-')
+    myfit2.SetParameter(0,10000.)
+    myfit2.SetParLimits(0,0,1000000)
+    myfit2.SetParName(1,'#tau_mu^-')
+    myfit2.FixParameter(1,0.717)
+    myfit2.SetParName(2,'#N_mu^+')
+    myfit2.SetParLimits(2,0,1000000)
+    myfit2.SetParameter(2,10000)
+    myfit2.SetParName(3,'#tau_mu^+')
+    myfit2.FixParameter(3,2.197)
+    myfit2.SetParName(4,'Bkg')
+    myfit2.FixParameter(4,0)
+
+    # set fit line style
+    myfit2.SetLineColor(kRed)
+    myfit2.SetLineWidth(1)
+
+    file.decayTime.Fit(myfit2, "R")
+    myfit2.ReleaseParameter(1)
+    #myfit2.FixParameter(0, myfit2.GetParameter(0))
+    #myfit2.FixParameter(2, myfit2.GetParameter(2))
     file.decayTime.Fit(myfit2, "R")
     c1.Modified()
     c1.Update()
