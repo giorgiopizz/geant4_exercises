@@ -23,8 +23,8 @@
 
 //#include "SensitiveDetector.hh"
 #include "G4SDManager.hh"
-
-// #define CERBERO_SOPRA
+#include "G4DormandPrince745.hh"
+#define CERBERO_SOPRA
 
 DetectorConstruction::DetectorConstruction()
 {
@@ -389,17 +389,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 
 
 	//secondo scintillatore ruotato con campo magnetico
-	// G4RotationMatrix* rotationMatrix = new G4RotationMatrix();
-	//   rotationMatrix->rotateY(90.*deg);
-	  // physiSecondScint = new G4PVPlacement(rotationMatrix,//rm,
-	  physiSecondScint = new G4PVPlacement(0,
+	G4RotationMatrix* rotationMatrix = new G4RotationMatrix();
+	  rotationMatrix->rotateY(90.*deg);
+	  physiSecondScint = new G4PVPlacement(rotationMatrix,//rm,
+	  // physiSecondScint = new G4PVPlacement(0,
 							  posSecondScint,
 							  scintLogicSecond,
 							  "SecondSensor",
 							  logicWorld,
 							  false,
 							  2);			//copy number
-	// scintLogicSecond->SetFieldManager(GetLocalFieldManager(),true);
+	scintLogicSecond->SetFieldManager(GetLocalFieldManager(),true);
 
 	// 3rd Plane of Si tracker
 	physiThirdScint = new G4PVPlacement(0,
@@ -464,7 +464,7 @@ G4FieldManager* DetectorConstruction::GetLocalFieldManager()
 {
   // pure magnetic field
   G4MagneticField* fMagneticField =
-    new G4UniformMagField(G4ThreeVector(0, 0., 20*gauss));
+    new G4UniformMagField(G4ThreeVector(0, 0., 1*gauss));
 
   // equation of motion with spin
   G4Mag_EqRhs* fEquation = new G4Mag_SpinEqRhs(fMagneticField);
@@ -474,12 +474,11 @@ G4FieldManager* DetectorConstruction::GetLocalFieldManager()
   fFieldManager->SetDetectorField(fMagneticField );
 
   // default stepper Runge Kutta 4th order
-  G4MagIntegratorStepper* fStepper = new G4ClassicalRK4( fEquation , 12); // spin needs 12 dof
-  //  G4MagIntegratorStepper* fStepper = new G4SimpleRunge( fEquation , 12); // spin needs 12 dof
-
-
+  // G4MagIntegratorStepper* fStepper = new G4ClassicalRK4( fEquation , 12); // spin needs 12 dof
+   // G4MagIntegratorStepper* fStepper = new G4SimpleRunge( fEquation , 12); // spin needs 12 dof
+G4MagIntegratorStepper* fStepper = new G4DormandPrince745( fEquation , 12); // spin needs 12 dof
   // add chord finder
-  G4double fMinStep=1*mm;
+  G4double fMinStep=3*mm;
   G4ChordFinder* fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper);
   fFieldManager->SetChordFinder( fChordFinder );
   return fFieldManager;
