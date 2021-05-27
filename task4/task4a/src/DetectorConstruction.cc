@@ -21,7 +21,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-//#include "SensitiveDetector.hh"
+#include "HadCaloSensitiveDetector.hh"
 #include "G4SDManager.hh"
 
 DetectorConstruction::DetectorConstruction()
@@ -126,10 +126,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
 	//Construction of the three si plane is actually done here
-	//	ConstructTelescope();
+	ConstructTelescope();
 
 	//Construction of the EM calorimeter
-	//	ConstructEMCalo();
+	ConstructEMCalo();
 
 	//Construction of the Had calorimeter
 	ConstructHadCalo();
@@ -236,7 +236,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructEMCalo()
 	G4double halfEmCentralSizeX = emCaloCentralCrystalWidth/2;
 	G4double halfEmCentralSizeY = emCaloCentralCrystalWidth/2;
 
-
 	G4Box* emSolid = new G4Box("emCaloSolid",halfEmCaloSizeX,halfEmCaloSizeY,halfEmCaloSizeZ);
 
 	G4LogicalVolume* emLogic = new G4LogicalVolume( emSolid,//its solid
@@ -250,8 +249,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructEMCalo()
 							   false, //no boolean operation
 							   10); //copy number
 
+	//Now we create the central volume that will be embedded in the previous volume
 	G4Box* emCentralSolid=new G4Box("emCentralSolid",halfEmCentralSizeX,halfEmCentralSizeY,halfEmCaloSizeZ);
-	G4LogicalVolume* emCentralLogic = new G4LogicalVolume( emCentralSolid,pbw04,"emCentralLogic");
+	G4LogicalVolume* emCentralLogic = new G4LogicalVolume( emCentralSolid, pbw04,"emCentralLogic");
+
 	emCaloCentralCrystal = new G4PVPlacement( 0 , G4ThreeVector(0,0,0), emCentralLogic , "EmCentral", emLogic ,false, 11);
 
 	G4Color yellow(1,1,0);
@@ -274,20 +275,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructHadCalo()
 	G4LogicalVolume* hadCaloLogic = new G4LogicalVolume( hadCaloSolid,//its solid
 														 fe,//its material
 														 "HadCaloLogic");//its name
-	//We now make layers of LAr and add them to the hadronic calo logic
-	G4Tubs* hadLayerSolid = new G4Tubs( "HadCaloLayerSolid", 0 , hadCaloRadius , hadCaloLArThickness/2, 0, CLHEP::twopi);
-	G4LogicalVolume* hadLayerLogic = new G4LogicalVolume(hadLayerSolid,lar,"HadLayerLogic");
-	//Translation of one Layer with respect previous Layer
-	G4ThreeVector absorberLayer(0,0,hadCaloFeThickness);
-	G4ThreeVector activeLayer(0,0,hadCaloLArThickness);
 	G4int hadCaloCopyNum = 1000;
-	G4int layerCopyNum = hadCaloCopyNum;
-	for ( int layerIdx = 0 ; layerIdx < hadCaloNumLayers ; ++layerIdx )
-	{
-		G4ThreeVector position = (layerIdx+1)*absorberLayer + (layerIdx+0.5)*activeLayer;
-		position -= G4ThreeVector(0,0,halfHadCaloHalfZ);//Position is w.r.t. center of mother volume: the hadCaloLogic
-		new G4PVPlacement(0,position,hadLayerLogic,"HadCaloLayer",hadCaloLogic,false,++layerCopyNum);
-	}
 	hadCalo = new G4PVPlacement( 0, //no rotation
 							     posHadCalo, //translation
 							     hadCaloLogic,//its logical volume
@@ -296,68 +284,51 @@ G4VPhysicalVolume* DetectorConstruction::ConstructHadCalo()
 							     false,
 							     hadCaloCopyNum);//copy number
 
-	// ********************************************************************************
-	// Task 3.b - Exercise 8
-	//  - Uncomment the line below to add a small uniform magnetic field (35 mT)
-	//    to the detector volume
-	// ********************************************************************************
-	hadCaloLogic->SetFieldManager(GetLocalFieldManager(),true);
-	// ---
 
+	//We now make layers of LAr and add them to the hadronic calo logic
+	G4Tubs* hadLayerSolid = new G4Tubs( "HadCaloLayerSolid", 0 , hadCaloRadius , hadCaloLArThickness/2, 0, CLHEP::twopi);
+
+	//Create the logical value for the LAr layer
+	G4LogicalVolume* hadLayerLogic = new G4LogicalVolume(hadLayerSolid,lar,"HadLayerLogic",0);
+
+	//--------------
+	// Exercise 1 Task4a
+	//--------------
+	//Create a SD
+	//We need to create a SD and attach it to the active layer of the HAD calorimeter: The LAr logic volume
+	HadCaloSensitiveDetector * sensitive = new HadCaloSensitiveDetector("/HadCalo");
+	G4SDManager * sdman = G4SDManager::GetSDMpointer();
+	sdman->AddNewDetector(sensitive);
+	hadLayerLogic->SetSensitiveDetector(sensitive);
+
+
+	// Step 1: create a SD
+	// Hint: create an object of type HadCaloSensitiveDetector
+	//HadCaloSensitiveDetector* sensitive = new HadCaloSensitiveDetector("/HadClo");
+
+	// Step 2: add it to the SD manager
+	// Hint: use G4SDManager* sdman = G4SDManager::GetSDMpointer(); to get the manager
+	// add a SD with : sdman->AddNewDetector( sensitive );
+
+	// Step 3: add the SD to the hadLayerLogic volume
+	// Hint: use hadLayerLogic->AddSensitiveDetector(...)
+
+
+
+	//Translation of one Layer with respect previous Layer
+	G4ThreeVector absorberLayer(0,0,hadCaloFeThickness);
+	G4ThreeVector activeLayer(0,0,hadCaloLArThickness);
+	G4int layerCopyNum = hadCaloCopyNum;
+	for ( int layerIdx = 0 ; layerIdx < hadCaloNumLayers ; ++layerIdx )
+	{
+		G4ThreeVector position = (layerIdx+1)*absorberLayer + (layerIdx+0.5)*activeLayer;
+		position -= G4ThreeVector(0,0,halfHadCaloHalfZ);//Position is w.r.t. center of mother volume: the hadCaloLogic
+		new G4PVPlacement(0,position,hadLayerLogic,"HadCaloLayer",hadCaloLogic,false,++layerCopyNum);
+	}
 	G4Colour green(0,1,0);
 	G4Colour white(1,1,1);
 	hadCaloLogic->SetVisAttributes(new G4VisAttributes(green));
 	hadLayerLogic->SetVisAttributes(new G4VisAttributes(white));
 	//hadLayerLogic->SetVisAttributes(G4VisAttributes::Invisible);
 	return hadCalo;
-}
-
-#include "G4RunManager.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4SolidStore.hh"
-
-void DetectorConstruction::UpdateGeometry()
-{
-  // Cleanup old geometry
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
-
-  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
-
-
-}
-
-#include "G4FieldManager.hh"
-#include "G4UniformMagField.hh"
-#include "G4Mag_SpinEqRhs.hh"
-#include "G4ClassicalRK4.hh"
-#include "G4SimpleRunge.hh"
-#include "G4ChordFinder.hh"
-
-G4FieldManager* DetectorConstruction::GetLocalFieldManager()
-{
-  // pure magnetic field
-  G4MagneticField* fMagneticField =
-    // new G4UniformMagField(G4ThreeVector(3.5e-3*tesla, 0., 0.));
-	new G4UniformMagField(G4ThreeVector(20*gauss, 0., 0.));
-  // equation of motion with spin
-  G4Mag_EqRhs* fEquation = new G4Mag_SpinEqRhs(fMagneticField);
-
-  // local field manager
-  G4FieldManager* fFieldManager = new G4FieldManager();
-  fFieldManager->SetDetectorField(fMagneticField );
-
-  // default stepper Runge Kutta 4th order
-  G4MagIntegratorStepper* fStepper = new G4ClassicalRK4( fEquation , 12); // spin needs 12 dof
-  //  G4MagIntegratorStepper* fStepper = new G4SimpleRunge( fEquation , 12); // spin needs 12 dof
-
-
-  // add chord finder
-  G4double fMinStep=1*mm;
-  G4ChordFinder* fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper);
-  fFieldManager->SetChordFinder( fChordFinder );
-  return fFieldManager;
 }

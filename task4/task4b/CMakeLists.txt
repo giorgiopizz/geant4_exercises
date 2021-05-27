@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.8...3.18)
 if(${CMAKE_VERSION} VERSION_LESS 3.12)
   cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
-project(task3b)
+project(task4b)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -41,8 +41,8 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(task3b task3b.cc ${sources} ${headers})
-target_link_libraries(task3b ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} )
+add_executable(task4b task4b.cc ${sources} ${headers})
+target_link_libraries(task4b ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -50,18 +50,10 @@ target_link_libraries(task3b ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(AnaEx02_SCRIPTS
+    pi.mac
+    el.mac
     vis.mac
     visQt.mac
-    task3b.mac
-    muon.mac
-    analyse.py
-    analyseDecay.py
-    analyseSpinDecay.py
-    analyseMaterialDecay.py
-    asymmetry_confronto.py
-    piDecay.mac
-    muonSpin.mac
-    muonFast.mac
   )
 
 foreach(_script ${AnaEx02_SCRIPTS})
@@ -75,4 +67,4 @@ endforeach()
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS task3b DESTINATION bin)
+install(TARGETS task4b DESTINATION bin)

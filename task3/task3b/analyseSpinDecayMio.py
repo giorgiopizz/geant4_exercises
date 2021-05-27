@@ -95,11 +95,11 @@ myspinfit.SetLineColor(kRed)
 myspinfit.SetLineWidth(1)
 
 
-myAsymmetryF = TF1('asymmetry_tf1', asymmetry_function, 0., 10, 3)
+myAsymmetryF = TF1('asymmetry_tf1', asymmetry_function, 0., 5, 3)
 myAsymmetryF.SetParName(0,'#xi')
 myAsymmetryF.SetParameter(0,0.32)
 myAsymmetryF.SetParName(1,'#omega')
-myAsymmetryF.SetParameter(1,1.7)
+myAsymmetryF.FixParameter(1,1.7)
 myAsymmetryF.SetParName(2,'c')
 myAsymmetryF.SetParameter(2,0)
 
@@ -179,6 +179,7 @@ def analyseDecay(fname):
 
 
     asymmetry_graph.Fit(myAsymmetryF,"R")
+    calcLande(myAsymmetryF.GetParameter(1), 20e-4)
     c4.Modified()
     c4.Update()
 
@@ -191,13 +192,11 @@ def calcLande(omega,bfield):
     c=2.998e8 # m/s
     m=105.658e6*q/c**2
     magneton=q*hbar/(2.*m)  # 4.485e-26 * J/T
-
     g=omega*hbar/(magneton*bfield)
     g_pdg = 11659209e-10*2+2
     print 'Lande PDG g=', g_pdg
     print 'Lande g=',g
     print 't = ',(g-g_pdg)/12e-10
-
     return g
 
 

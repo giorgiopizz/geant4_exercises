@@ -60,6 +60,9 @@ set(AnaEx02_SCRIPTS
     piDecay.mac
     muonSpin.mac
     muonFast.mac
+    analyseSpinDecayMio.py
+    asymmetry_confronto.py
+    muon2.mac
   )
 
 foreach(_script ${AnaEx02_SCRIPTS})
