@@ -39,9 +39,9 @@ RunAction::RunAction()
  //  analysisManager->CreateH1("decayTimeBackward","Edep in absorber", 25, 0., 11);
 
 }
-RunAction::~RunAction(){
-	// delete G4AnalysisManager::Instance();  
-}
+// RunAction::~RunAction(){
+// 	// delete G4AnalysisManager::Instance();
+// }
 void RunAction::BeginOfRunAction(const G4Run* aRun )
 {
 	// G4AnalysisManager * analysisManager = G4Analysis::ManagerInstance("root");
