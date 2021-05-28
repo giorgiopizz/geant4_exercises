@@ -71,6 +71,6 @@ void EventAction::EndOfEventAction(const G4Event * anEvent)
         G4String sdname = "/myDet/SD";
         SensitiveDetector * sensitive = this->GetSensitiveDetector(sdname);
 
-        trackMap_t trackMap = sensitive->GetTrackMap(); 
+        trackMap_t trackMap = sensitive->GetTrackMap();
     }
 }

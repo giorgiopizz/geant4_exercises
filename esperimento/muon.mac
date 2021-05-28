@@ -70,4 +70,5 @@
 #/run/setCut 1 km
 
 
+# usato per avere la nostra stessa statistica: 100000
 /run/beamOn 100000

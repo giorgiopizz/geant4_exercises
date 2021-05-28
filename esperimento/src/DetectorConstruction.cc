@@ -389,10 +389,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 
 
 	//secondo scintillatore ruotato con campo magnetico
-	G4RotationMatrix* rotationMatrix = new G4RotationMatrix();
-	  rotationMatrix->rotateY(90.*deg);
-	  physiSecondScint = new G4PVPlacement(rotationMatrix,//rm,
-	  // physiSecondScint = new G4PVPlacement(0,
+	// G4RotationMatrix* rotationMatrix = new G4RotationMatrix();
+	//   rotationMatrix->rotateY(90.*deg);
+	//   physiSecondScint = new G4PVPlacement(rotationMatrix,//rm,
+	  physiSecondScint = new G4PVPlacement(0,
 							  posSecondScint,
 							  scintLogicSecond,
 							  "SecondSensor",
