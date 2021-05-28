@@ -19,11 +19,11 @@
 #endif
 
 #include "DetectorConstruction.hh"
-// #include "PrimaryGeneratorAction.hh"
-// #include "StackingAction.hh"
-// #include "SteppingAction.hh"
-// #include "EventAction.hh"
-// #include "RunAction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "StackingAction.hh"
+#include "SteppingAction.hh"
+#include "EventAction.hh"
+#include "RunAction.hh"
 
 #include "MyActionInitialization.hh"
 
@@ -103,7 +103,7 @@ int main(int argc,char** argv)
   // //Event action (handles for beginning / end of event)
   // EventAction* anEventAction = new EventAction();
   // runManager->SetUserAction( anEventAction );
-
+  //
   // //Run action (handles for beginning / end of event)
   // RunAction* aRunAction = new RunAction();
   // runManager->SetUserAction( aRunAction );

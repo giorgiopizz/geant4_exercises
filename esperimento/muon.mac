@@ -71,4 +71,4 @@
 
 
 # usato per avere la nostra stessa statistica: 100000
-/run/beamOn 100000
+/run/beamOn 600000

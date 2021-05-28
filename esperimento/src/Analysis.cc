@@ -80,7 +80,7 @@ void Analysis::AddTrack( const G4Track * aTrack )
 void Analysis::AddEDepEM( G4double edep, G4int volCopyNum, G4double time)
 {
 	thisEventTotEM[volCopyNum-1] += edep;
-	if (thisEventTotEM[volCopyNum-1]>3*MeV){
+	if (thisEventTotEM[volCopyNum-1]>1.5*MeV){
 		if (volCopyNum==1 && activationTimeFirst==-1){
 			activationTimeFirst = time;
 			// G4cout << " attivazione primo detector " << G4endl;
