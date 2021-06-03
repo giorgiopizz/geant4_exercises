@@ -54,6 +54,7 @@ set(AnaEx02_SCRIPTS
     visQt.mac
     sd.mac
     sd2.mac
+    processi.mac
   )
 
 foreach(_script ${AnaEx02_SCRIPTS})

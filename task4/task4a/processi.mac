@@ -1,0 +1,6 @@
+/particle/select pi-
+/particle/process/dump -1
+/particle/select proton
+/particle/process/dump -1
+/particle/select neutron
+/particle/process/dump -1
