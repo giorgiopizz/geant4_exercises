@@ -470,49 +470,49 @@ void DetectorConstruction::UpdateGeometry()
 G4FieldManager* DetectorConstruction::GetLocalFieldManager()
 {
   // pure magnetic field
-  G4ElectroMagneticField* fMagneticField =
+  G4MagneticField* fMagneticField =
     new G4UniformMagField(G4ThreeVector(0, 0., 21*gauss));
 
   // equation of motion with spin
-  // G4Mag_EqRhs* fEquation = new G4Mag_SpinEqRhs(fMagneticField);
+  G4Mag_EqRhs* fEquation = new G4Mag_SpinEqRhs(fMagneticField);
   //
   // // local field manager
-  // G4FieldManager* fFieldManager = new G4FieldManager(fMagneticField);
+  G4FieldManager* fFieldManager = new G4FieldManager(fMagneticField);
 
-  G4EqEMFieldWithSpin* equation = new G4EqEMFieldWithSpin(fMagneticField);
-  G4FieldManager* fFieldManager
-      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+  // G4EqEMFieldWithSpin* equation = new G4EqEMFieldWithSpin(fMagneticField);
+  // G4FieldManager* fFieldManager
+      // = G4TransportationManager::GetTransportationManager()->GetFieldManager();
   fFieldManager->SetDetectorField(fMagneticField );
 
   // default stepper Runge Kutta 4th order
   // G4MagIntegratorStepper* fStepper = new G4ClassicalRK4( fEquation , 12); // spin needs 12 dof
    // G4MagIntegratorStepper* fStepper = new G4SimpleRunge( fEquation , 12); // spin needs 12 dof
-G4MagIntegratorStepper* fStepper = new G4DormandPrinceRK78( equation , 12); // spin needs 12 dof
+G4MagIntegratorStepper* fStepper = new G4DormandPrinceRK78( fEquation , 12); // spin needs 12 dof
   // add chord finder
   G4double minStep           = 0.01*mm;
 
-   G4ChordFinder* chordFinder =
-				  new G4ChordFinder((G4MagneticField*)fMagneticField,minStep,fStepper);
-  G4double deltaChord        = 3.0*mm;
-       chordFinder->SetDeltaChord( deltaChord );
-
-       G4double deltaOneStep      = 0.01*mm;
-       fFieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
-
-       G4double deltaIntersection = 0.1*mm;
-       fFieldManager->SetDeltaIntersection(deltaIntersection);
-
-       G4TransportationManager* transportManager =
-                             G4TransportationManager::GetTransportationManager();
-
-       G4PropagatorInField* fieldPropagator =
-                                        transportManager->GetPropagatorInField();
-
-       G4double epsMin            = 2.5e-7*mm;
-       G4double epsMax            = 0.05*mm;
-
-       fieldPropagator->SetMinimumEpsilonStep(epsMin);
-       fieldPropagator->SetMaximumEpsilonStep(epsMax);
+  //  G4ChordFinder* chordFinder =
+	// 			  new G4ChordFinder((G4MagneticField*)fMagneticField,minStep,fStepper);
+  // G4double deltaChord        = 3.0*mm;
+  //      chordFinder->SetDeltaChord( deltaChord );
+  //
+  //      G4double deltaOneStep      = 0.01*mm;
+  //      fFieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
+  //
+  //      G4double deltaIntersection = 0.1*mm;
+  //      fFieldManager->SetDeltaIntersection(deltaIntersection);
+  //
+  //      G4TransportationManager* transportManager =
+  //                            G4TransportationManager::GetTransportationManager();
+  //
+  //      G4PropagatorInField* fieldPropagator =
+  //                                       transportManager->GetPropagatorInField();
+  //
+  //      G4double epsMin            = 2.5e-7*mm;
+  //      G4double epsMax            = 0.05*mm;
+  //
+  //      fieldPropagator->SetMinimumEpsilonStep(epsMin);
+  //      fieldPropagator->SetMaximumEpsilonStep(epsMax);
 
 
 
@@ -526,7 +526,7 @@ G4MagIntegratorStepper* fStepper = new G4DormandPrinceRK78( equation , 12); // s
 // fFieldManager->SetMinimumEpsilonStep(1e-2);
 // fFieldManager->SetMaximumEpsilonStep(1e-2);
   // G4double fMinStep=1*mm;
-  // G4ChordFinder* fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper);
-  fFieldManager->SetChordFinder( chordFinder );
+  G4ChordFinder* fChordFinder = new G4ChordFinder( fMagneticField, 1*mm,fStepper);
+  fFieldManager->SetChordFinder( fChordFinder );
   return fFieldManager;
 }

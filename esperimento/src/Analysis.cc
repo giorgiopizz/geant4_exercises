@@ -16,9 +16,9 @@
 #include "G4ProcessType.hh"
 #include "TH1D.h"
 #include "TFile.h"
-
-Analysis* Analysis::singleton = 0;
-
+#include "G4Threading.hh"
+// std::vector<Analysis*> Analysis::singleton = 0;
+Analysis::singletonMap_t Analysis::singleton;
 Analysis::Analysis() :
 	thisEventSecondaries(0),
 	thisRunTotSecondaries(0),
@@ -98,6 +98,29 @@ void Analysis::AddEDepEM( G4double edep, G4int volCopyNum, G4double time)
 
 void Analysis::PrepareNewEvent(const G4Event* /*anEvent*/)
 {
+	if (histos.size()==0){
+		for (int i=0;i<3;i++) thisRunTotEM[i]=0;
+		thisRunTotSecondaries = 0;
+
+		TH1D *h=0;
+		// create Histograms
+		histos.push_back(h=new TH1D("decayPos","Z Position of Decay",100,0.8*m,(0.8+2.24)*m) );
+		h->GetYaxis()->SetTitle("events");
+		h->GetXaxis()->SetTitle("t_{decay} #mus");
+		h->StatOverflows();
+		histos.push_back(h=new TH1D("decayTime","Time of Decay",200,0,11 ) ); //microsecond
+		h->GetYaxis()->SetTitle("events");
+		h->GetXaxis()->SetTitle("t_{decay} #mus");
+		h->StatOverflows();
+		histos.push_back(h=new TH1D("decayTimeForward","Time of Decay [Forward electron]",25,0,11) ); // microsecond
+		h->GetYaxis()->SetTitle("forward events");
+		h->GetXaxis()->SetTitle("t_{decay} #mus");
+		h->StatOverflows();
+		histos.push_back(h=new TH1D("decayTimeBackward","Time of Decay [Backward electron]",25,0,11) ); // microsecond
+		h->GetYaxis()->SetTitle("backward events");
+		h->GetXaxis()->SetTitle("t_{decay} #mus");
+		h->StatOverflows();
+	}
 	//Reset variables relative to this event
 	thisEventSecondaries = 0;
 	for (int i=0;i<3;i++) thisEventTotEM[i]=0;

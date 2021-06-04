@@ -16,15 +16,24 @@
 #include "G4Event.hh"
 #include "G4Run.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Threading.hh"
+#include <map>
 // ROOT
 class TH1;
 class G4Track;
 
+
 class Analysis {
 public:
   static Analysis* GetInstance() {
-    if ( Analysis::singleton == NULL ) Analysis::singleton = new Analysis();
-    return Analysis::singleton;
+    if ( Analysis::singleton[G4Threading::G4GetThreadId()] == NULL ) Analysis::singleton.insert( std::make_pair( G4Threading::G4GetThreadId() , new Analysis() ) );
+    singletonMap_t::iterator it = Analysis::singleton.find(G4Threading::G4GetThreadId());
+    if (it!=Analysis::singleton.end()){
+        return it->second;
+    }
+    // for(it=Analysis::singleton.begin(); it!=Analysis::singleton.end(); ++it){
+    //     if (it->first == G4Threading::G4GetThreadId())  return it->second;
+    // }
   }
   ~Analysis();
 
@@ -36,9 +45,12 @@ public:
   void AddSecondary( G4int num ) { thisEventSecondaries += num; }
   void AddTrack( const G4Track * aTrack );
   int numDecays() { return decays;}
+
 private:
   Analysis();
-  static Analysis* singleton;
+  // static std::vector<Analysis*> singleton;
+  typedef std::map<G4int, Analysis*> singletonMap_t;
+  static singletonMap_t singleton;
   G4double thisEventTotEM[3];
   G4int thisEventSecondaries;
   G4double thisRunTotEM[3];

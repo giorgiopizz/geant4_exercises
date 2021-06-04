@@ -20,7 +20,7 @@ RunAction::RunAction()
 void RunAction::BeginOfRunAction(const G4Run* aRun )
 {
 	G4cout<<"Starting Run: "<<aRun->GetRunID()<<G4endl;
-	Analysis::GetInstance()->PrepareNewRun(aRun);
+	// Analysis::GetInstance()->PrepareNewRun(aRun);
 }
 
 void RunAction::EndOfRunAction( const G4Run* aRun )
