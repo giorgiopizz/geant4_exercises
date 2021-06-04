@@ -27,8 +27,8 @@ HadCaloSensitiveDetector::HadCaloSensitiveDetector(G4String SDname)
 	//---------------
 	// Add myCollectionName to the vector of names called collectionName variable
 	// Hint1: use insert method:
-	//collectionName.insert();
- 
+	collectionName.insert(myCollectionName);
+
   // Note that we may add as many collection names we would wish: ie
   // a sensitive detector can have many collections.
 }
@@ -108,6 +108,7 @@ void HadCaloSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 	// Hint 1: Get the SD_name with the GetName() function,
 	// Hint 2: Get the collection_name from the collectionName vector: your collection is at position 0: collectionName[0]
 
+    hitCollection = new HadCaloHitCollection(GetName(), collectionName[0]);
 
 	// -- and attachment of this collection to the "Hits Collection of this Event":
 	// -- To insert the collection, we need to get an index for it. This index
@@ -127,5 +128,5 @@ void HadCaloSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 	//Exercise 1 of task4c
 	//---------------
 	//Some verbosity, uncomment this line
-	//hitCollection->PrintAllHits();
+	hitCollection->PrintAllHits();
 }

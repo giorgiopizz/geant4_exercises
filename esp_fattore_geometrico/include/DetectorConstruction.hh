@@ -109,6 +109,8 @@ private:
   G4double scintWidth;
   G4double scintHeight;
 
+  G4double scintPiccoloLenght, scintPiccoloWidth, scintPiccoloHeight;
+
 
   G4ThreeVector posFirstScint;
   G4ThreeVector posSecondScint;

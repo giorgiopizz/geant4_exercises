@@ -48,7 +48,7 @@ SensitiveDetector* EventAction::GetSensitiveDetector(G4String detname)
 
 void EventAction::BeginOfEventAction(const G4Event* anEvent )
 {
-  if ( anEvent->GetEventID() % 10 == 0 ) //1000
+  if ( anEvent->GetEventID() % 10000 == 0 ) //1000
     {
       G4cout<<"Starting Event: "<<anEvent->GetEventID()<<G4endl;
     }
@@ -99,14 +99,17 @@ void EventAction::EndOfEventAction(const G4Event* anEvent)
       for ( ; hit != end ; ++hit)
 	{
 	  layer = (*hit)->GetLayerNumber();
-	  edep += (*hit)->GetEdep();
+	  edep = (*hit)->GetEdep();
 	}
     }
   //G4cout << "Filling histogram >>>>>>>>>>>>>>>>>>>>" << G4endl;
-  //G4cout << "Edep = " << edep << G4endl;
+  if (edep>=1*keV){
+      // G4cout << "Edep = " << edep/eV << G4endl;
+  // }
+
   int check = 0;
   if (hene) check = hene->Fill(edep/keV);
-
+}
   //G4cout << "Address of hene: " << static_cast<void*>(hene) << " Check: "
   //	 << check <<  G4endl;
 

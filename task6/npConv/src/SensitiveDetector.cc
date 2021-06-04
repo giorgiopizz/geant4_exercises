@@ -123,7 +123,7 @@ G4bool SensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
   // energy deposit in this step
   G4double edep = step->GetTotalEnergyDeposit();
 
-  //G4cout << " Total Step Energy Deposit Edep = " << G4BestUnit(edep,"Energy") << G4endl;
+  // G4cout << " Total Step Energy Deposit Edep = " << G4BestUnit(edep,"Energy") << G4endl;
 
   //Total EnergyDeposited
   //Tparticle->TrackAddEDep(edep);

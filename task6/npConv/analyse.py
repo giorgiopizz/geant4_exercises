@@ -112,7 +112,7 @@ Simple PyROOT macro to read a root file and plot
 dacay time and decay position.
 """
 def analyseDecay():
-    global file, file2, c1, c2
+    global file, file2, c1, c2, h
 
     # load histograms from file
     file = TFile.Open("histoEnergy.root")
@@ -121,7 +121,11 @@ def analyseDecay():
     file2.ls()
     #draw histogram and fit
     c1 = TCanvas('c1','Energy Distribution',10,10,1800,1200)
-    file.EnDis.Draw()
+    h = file.EnDis
+
+    h1 = h.RebinX(5)
+    h1.GetXaxis().SetRange(1,300)
+    h1.Draw()
     # c1.SetLogy()
     c1.SaveAs("histo_"+argv[1]+".png")
     c1.Modified()
@@ -134,6 +138,8 @@ def analyseDecay():
     c2.SaveAs("histo_mother_"+argv[1]+".png")
     c2.Modified()
     c2.Update()
+
+
 
     #
     # c2 = TCanvas('c2','Decay Position',250,20,700,500)
@@ -156,15 +162,15 @@ def analyseDecay():
     # calcLande(myspinfit.GetParameter('omega'),3.5e-3)  # tesla
 
     # asymmetry_histo = TH1D('asymmetry', 'Asymmetry U-D/(U+D)', 200, 0, 20)
-    file.Close()
-
-    file2.Close()
+    # file.Close()
+    #
+    # file2.Close()
 
 
 
 if __name__=='__main__':
     # check for run time arguments
     analyseDecay()
-    # gApplication.Run()
+    gApplication.Run()
 
 print "\n to quit press Ctrl-D"

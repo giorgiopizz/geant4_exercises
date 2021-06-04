@@ -25,7 +25,7 @@
 /gps/ene/max 100 MeV
 /gps/ene/gradient 1.
 /gps/ene/intercept 1.
-#/gps/polarization 0. 1. 0.
+/gps/polarization 0. 1. 0.
 
 
 
@@ -67,8 +67,9 @@
 /gps/polarization 0. -1. 0.
 
 # si può impostare cut più lungo
-#/run/setCut 1 km
+#/run/setCut 0.1 mm
 
 
 # usato per avere la nostra stessa statistica: 100000
-/run/beamOn 600000
+#/random/setSeeds 9 12312312312
+/run/beamOn 300000

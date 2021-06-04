@@ -95,8 +95,8 @@ int main(int argc,char** argv)
 
   // Optional User Action classes
   // Stacking Action
-  StackingAction* aStackingAction = new StackingAction();
-  runManager->SetUserAction(aStackingAction);
+  // StackingAction* aStackingAction = new StackingAction();
+  // runManager->SetUserAction(aStackingAction);
   //Stepping Action
   SteppingAction* aSteppingAction = new SteppingAction();
   runManager->SetUserAction(aSteppingAction);
@@ -111,7 +111,7 @@ int main(int argc,char** argv)
 
 
 
-  runManager->SetUserInitialization(new MyActionInitialization());
+  // runManager->SetUserInitialization(new MyActionInitialization());
 
   // Initialize G4 kernel
   runManager->Initialize();

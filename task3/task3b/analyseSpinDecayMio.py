@@ -41,7 +41,7 @@ def spinDecay(x,par):
 # MIA DEFINIZIONE per funzione asimmetria
 def asymmetry_function(x,par):
 
-    return par[0]*cos(par[1]*x[0])+par[2]
+    return par[0]*cos(par[1]*x[0]+par[3])+par[2]
 
 
 # set fit range, parameter names and start values
@@ -95,13 +95,16 @@ myspinfit.SetLineColor(kRed)
 myspinfit.SetLineWidth(1)
 
 
-myAsymmetryF = TF1('asymmetry_tf1', asymmetry_function, 0., 5, 3)
+myAsymmetryF = TF1('asymmetry_tf1', asymmetry_function, 0.1, 7, 4)
 myAsymmetryF.SetParName(0,'#xi')
-myAsymmetryF.SetParameter(0,0.32)
+myAsymmetryF.SetParameter(0,0.165)
+myAsymmetryF.SetParLimits(0,0.001,1)
 myAsymmetryF.SetParName(1,'#omega')
-myAsymmetryF.FixParameter(1,1.7)
+myAsymmetryF.SetParameter(1,1.75)
 myAsymmetryF.SetParName(2,'c')
 myAsymmetryF.SetParameter(2,0)
+myAsymmetryF.SetParName(3,'#phi')
+myAsymmetryF.SetParameter(3,-0.3)
 
 myAsymmetryF.SetLineColor(kRed)
 myAsymmetryF.SetLineWidth(1)
@@ -165,9 +168,10 @@ def analyseDecay(fname):
         # asymmetry_histo.SetBinContent(i, x)
 
 
-    c4 = TCanvas('c4','Asymm',10,10,700,500)
+    c4 = TCanvas('c4','Asymm',10,10,1800,1200)
     asymmetry_graph = TGraphErrors(file.decayTimeForward.GetNbinsX(),np.array(x),np.array(y), np.array(x_err), np.array(y_err))
     c4.cd()
+    asymmetry_graph.SetTitle("Asymmetry High Statistics (20k) and Purity")
     asymmetry_graph.GetXaxis().SetRangeUser(0.1,11)
     asymmetry_graph.Draw("ALP")
 
@@ -182,7 +186,7 @@ def analyseDecay(fname):
     calcLande(myAsymmetryF.GetParameter(1), 20e-4)
     c4.Modified()
     c4.Update()
-
+    c4.SaveAs("asimmetria_caso_ideale.png")
     file2.Close()
 
 def calcLande(omega,bfield):

@@ -138,7 +138,7 @@ void DetectorConstruction::ComputeParameters()
 
   halfArDet_x = 10* cm;
   halfArDet_y = 10* cm;
-  halfArDet_z =  3* mm;
+  halfArDet_z =  3* mm; //ATTENZIONE ERA 3mm
 
   ArDet_z_displacement = 1*cm;
 }

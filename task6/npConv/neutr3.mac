@@ -18,6 +18,6 @@
 
 /random/setSeeds 1 4
 /gps/particle neutron
-/gps/energy 2 MeV
+/gps/energy 14 MeV
 /run/beamOn 1000000
 #

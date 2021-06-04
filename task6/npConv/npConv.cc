@@ -50,27 +50,27 @@ int main(int argc,char** argv)
   // Run manager
   G4RunManager * runManager = new G4RunManager();
 
-  // mandatory Initialization classes 
+  // mandatory Initialization classes
   G4VUserDetectorConstruction* detector = new DetectorConstruction();
   runManager->SetUserInitialization(detector);
 
   // Local user Physics List
   //G4VUserPhysicsList* physics = new PhysicsList();
 
-  // Reference Physics List from Geant4 kernel 
+  // Reference Physics List from Geant4 kernel
   //G4VUserPhysicsList* physics = new QGSP_BERT();
 
   G4cout << "Setting Physics List" << G4endl;
-  G4VUserPhysicsList* physics = new QGSP_BERT_HP();  //Declare a physics list using QGSP_BERT_HP 
+  G4VUserPhysicsList* physics = new QGSP_BERT_HP();  //Declare a physics list using QGSP_BERT_HP
                                                    //HP is for low energy neutrons and uses G4NDL cross sections
 
-  //G4VUserPhysicsList* physics = new QGSP_BIC_HP();  //Declare a physics list using QGSP_BERT_HP 
+  //G4VUserPhysicsList* physics = new QGSP_BIC_HP();  //Declare a physics list using QGSP_BERT_HP
 
-  //G4VUserPhysicsList* physics = new CopperPhysicsList();
+  // G4VUserPhysicsList* physics = new CopperPhysicsList();
 
-  // mandatory User class  
+  // mandatory User class
   runManager->SetUserInitialization(physics);
-   
+
   // mandatory User class
   G4VUserPrimaryGeneratorAction* gen_action = new PrimaryGeneratorAction();
   runManager->SetUserAction(gen_action);
@@ -85,39 +85,39 @@ int main(int argc,char** argv)
 
   // Initialize G4 kernel
   runManager->Initialize();
-      
+
 
   G4VisManager* visManager = new G4VisExecutive();
   visManager->Initialize();
-     
+
   // Get the pointer to the User Interface manager
   //
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();
 
-  if (argc!=1) {  // batch mode  
-    
+  if (argc!=1) {  // batch mode
+
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
   }
   else {           // interactive mode : define UI session
-     
+
 #if  G4VERSION_NUMBER>=930
     G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-    if (ui->IsGUI()) 
+    if (ui->IsGUI())
       UImanager->ApplyCommand("/control/execute visQt.mac");
-    else 
-      UImanager->ApplyCommand("/control/execute vis.mac");     
+    else
+      UImanager->ApplyCommand("/control/execute vis.mac");
 #else
   #ifdef G4UI_USE_TCSH
-    G4UIsession * ui = new G4UIterminal(new G4UItcsh);      
+    G4UIsession * ui = new G4UIterminal(new G4UItcsh);
   #else
     G4UIsession * ui = new G4UIterminal();
   #endif
-    UImanager->ApplyCommand("/control/execute vis.mac");     
+    UImanager->ApplyCommand("/control/execute vis.mac");
 #endif
     ui->SessionStart();
-    delete ui;     
+    delete ui;
   }
 
   // Free the store: user actions, physics_list and detector_description are

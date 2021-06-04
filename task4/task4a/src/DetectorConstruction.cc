@@ -304,15 +304,16 @@ G4VPhysicalVolume* DetectorConstruction::ConstructHadCalo()
 
 	// Step 1: create a SD
 	// Hint: create an object of type HadCaloSensitiveDetector
-	//HadCaloSensitiveDetector* sensitive = new HadCaloSensitiveDetector("/HadClo");
+	// HadCaloSensitiveDetector* sensitive = new HadCaloSensitiveDetector("/HadClo");
 
 	// Step 2: add it to the SD manager
 	// Hint: use G4SDManager* sdman = G4SDManager::GetSDMpointer(); to get the manager
 	// add a SD with : sdman->AddNewDetector( sensitive );
-
+	// G4SDManager* sdman = G4SDManager::GetSDMpointer();
+	// sdman->AddNewDetector( sensitive );
 	// Step 3: add the SD to the hadLayerLogic volume
 	// Hint: use hadLayerLogic->AddSensitiveDetector(...)
-
+	// hadLayerLogic->AddSensitiveDetector(sensitive)
 
 
 	//Translation of one Layer with respect previous Layer

@@ -56,5 +56,5 @@ else
 void RunAction::EndOfRunAction( const G4Run* aRun )
 {
 	Analysis::GetInstance()->EndOfRun(aRun);
-	std::cout << "\n\n Number of decays: " << Analysis::GetInstance()->numDecays() << std::endl;
+	// std::cout << "\n\n Number of decays: " << Analysis::GetInstance()->numDecays() << std::endl;
 }

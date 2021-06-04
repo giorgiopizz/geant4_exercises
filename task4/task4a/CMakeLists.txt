@@ -55,6 +55,8 @@ set(AnaEx02_SCRIPTS
     sd.mac
     sd2.mac
     processi.mac
+    script.py
+    sd3.mac
   )
 
 foreach(_script ${AnaEx02_SCRIPTS})

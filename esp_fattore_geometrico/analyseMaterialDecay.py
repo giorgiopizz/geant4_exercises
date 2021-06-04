@@ -18,7 +18,7 @@ sys.path.append(rootPath)
 
 from math import *  #sqrt, exp, cos, pi
 
-from ROOT import TCanvas, TF1, TFile, TGaxis, TH1D, TGraph, TGraphErrors
+from ROOT import TCanvas, TF1, TFile, TGaxis, TH1D, TGraph
 from ROOT import gROOT, gStyle, gApplication
 from ROOT import kRed
 
@@ -55,24 +55,7 @@ myfit.SetParameter(1,200.)
 myfit.SetLineColor(kRed)
 myfit.SetLineWidth(1)
 
-def decay_double(x,par):
-    return par[0]*exp(-x[0]/par[1])+par[2]*exp(-x[0]/par[3])+par[4]
 
-myfit2 = TF1('myfit2', decay_double, 0., 20 ,5)
-myfit2.SetParName(0,'#N_mu^+')
-myfit2.SetParameter(0,10000.)
-myfit2.SetParName(1,'#tau_mu^+')
-myfit2.FixParameter(1,2.2)
-myfit2.SetParName(2,'#N_mu^-')
-myfit2.SetParameter(2,10000)
-myfit2.SetParName(3,'#tau_mu^-')
-myfit2.SetParameter(3,0.7)
-myfit2.SetParName(4,'Bkg')
-myfit2.FixParameter(4,0)
-
-# set fit line style
-myfit2.SetLineColor(kRed)
-myfit2.SetLineWidth(1)
 
 
 # set fit range, parameter names and start values
@@ -99,7 +82,7 @@ myAsymmetryF = TF1('asymmetry_tf1', asymmetry_function, 0., 10, 3)
 myAsymmetryF.SetParName(0,'#xi')
 myAsymmetryF.SetParameter(0,0.32)
 myAsymmetryF.SetParName(1,'#omega')
-myAsymmetryF.SetParameter(1,1.7)
+myAsymmetryF.SetParameter(1,3.)
 myAsymmetryF.SetParName(2,'c')
 myAsymmetryF.SetParameter(2,0)
 
@@ -112,18 +95,43 @@ Simple PyROOT macro to read a root file and plot
 dacay time and decay position.
 """
 def analyseDecay(fname):
-    global file, c1, c2, c3, c4, asymmetry_graph
+    global file, c1, c2, c3, c4
 
     # load histograms from file
     file = TFile.Open(fname)
     file.ls()
 
     # draw histogram and fit
-    # c1 = TCanvas('c1','Decay Time',10,10,700,500)
-    # file.decayTime.Draw()
-    # file.decayTime.Fit(myfit2)
-    # c1.Modified()
-    # c1.Update()
+    c1 = TCanvas('c1','Decay Time',10,10,700,500)
+    file.decayTime.Draw()
+    def decay_double(x,par):
+        return par[0]*exp(-x[0]/par[1])+par[2]*exp(-x[0]/par[3])+par[4]
+
+    myfit2 = TF1('myfit2', decay_double, 0.2, 20 ,5)
+    myfit2.SetParName(0,'#N_mu^-')
+    myfit2.SetParameter(0,10000.)
+    myfit2.SetParLimits(0,0,1000000)
+    myfit2.SetParName(1,'#tau_mu^-')
+    myfit2.FixParameter(1,0.717)
+    myfit2.SetParName(2,'#N_mu^+')
+    myfit2.SetParLimits(2,0,1000000)
+    myfit2.SetParameter(2,10000)
+    myfit2.SetParName(3,'#tau_mu^+')
+    myfit2.FixParameter(3,2.197)
+    myfit2.SetParName(4,'Bkg')
+    myfit2.FixParameter(4,0)
+
+    # set fit line style
+    myfit2.SetLineColor(kRed)
+    myfit2.SetLineWidth(1)
+
+    file.decayTime.Fit(myfit2, "R")
+    myfit2.ReleaseParameter(1)
+    #myfit2.FixParameter(0, myfit2.GetParameter(0))
+    #myfit2.FixParameter(2, myfit2.GetParameter(2))
+    file.decayTime.Fit(myfit2, "R")
+    c1.Modified()
+    c1.Update()
     #
     # c2 = TCanvas('c2','Decay Position',250,20,700,500)
     # file.decayPos.Draw()
@@ -145,45 +153,29 @@ def analyseDecay(fname):
     # calcLande(myspinfit.GetParameter('omega'),3.5e-3)  # tesla
 
     # asymmetry_histo = TH1D('asymmetry', 'Asymmetry U-D/(U+D)', 200, 0, 20)
-    x = []
-    y = []
-    x_err = []
-    y_err = []
-    for i in range(file.decayTimeForward.GetNbinsX()):
-        U = file.decayTimeForward.GetBinContent(i)
-        D = file.decayTimeBackward.GetBinContent(i)
-        x.append(file.decayTimeForward.GetBinCenter(i))
-        x_err.append(11/(file.decayTimeForward.GetNbinsX()*sqrt(12)))
-        try:
-            v = (U-D)/(U+D)
-            # print(v)
-            y_err.append(2*sqrt(U*D/(U+D)**3))
-            print(y_err)
-        except:
-            v= 0
-            y_err.append(0)
-        y.append(v)
+    # x = []
+    # y = []
+    # for i in range(100):
+    #     U = file.decayTimeForward.GetBinContent(i)
+    #     D = file.decayTimeBackward.GetBinContent(i)
+    #     x.append(file.decayTimeForward.GetBinCenter(i))
+    #     try:
+    #         v = (U-D)/(U+D)
+    #     except:
+    #         v= 0
+    #     y.append(v)
         # asymmetry_histo.SetBinContent(i, x)
 
-
-    c4 = TCanvas('c4','Asymm',10,10,700,500)
-    asymmetry_graph = TGraphErrors(file.decayTimeForward.GetNbinsX(),np.array(x),np.array(y), np.array(x_err), np.array(y_err))
-    c4.cd()
-    asymmetry_graph.GetXaxis().SetRangeUser(0.1,11)
-    asymmetry_graph.Draw("ALP")
-
+    #
+    # c4 = TCanvas('c4','Asymm',10,10,700,500)
+    # asymmetry_graph = TGraph(100,np.array(x),np.array(y))
+    # c4.cd()
+    # asymmetry_graph.Draw("AC*")
+    # asymmetry_graph.Fit(myAsymmetryF,"R")
     # asymmetry_histo.Draw()
     # asymmetry_histo.Fit(myAsymmetryF)
-
-    file2 = TFile("provaajeijfwo.root", "recreate")
-    asymmetry_graph.Write()
-
-
-    asymmetry_graph.Fit(myAsymmetryF,"R")
-    c4.Modified()
-    c4.Update()
-
-    file2.Close()
+    # c4.Modified()
+    # c4.Update()
 
 def calcLande(omega,bfield):
     omega=omega*1.e6     # MHz
@@ -203,7 +195,7 @@ def calcLande(omega,bfield):
 
 
 if __name__=='__main__':
-    fname='tot_21Gauss.root'
+    fname='run_0.root'
     # check for run time arguments
     if len(sys.argv)>1:
         fname=sys.argv[1]

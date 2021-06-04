@@ -90,16 +90,33 @@ void DetectorConstruction::ComputeParameters()
 
 	#ifdef CERBERO_SOPRA
 
-		// Cerbero sopra
+		// // Cerbero sopra
+		// scintLength = 80.*cm;
+		// scintWidth = 30.*cm;
+		// scintHeight = 4.*cm;
+		// G4double scintSeparation23 = 2.*cm; //separation between lower scintillators
+		// G4double scintSeparation12 = 2*cm;//separation between upper scintillators
+		// // look at note for explanation of posFirstScint y compontent
+		// posFirstScint  = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight + scintSeparation12 + scintHeight/4, 0.);
+		// posSecondScint = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight/2, 0.);
+		// posThirdScint  = G4ThreeVector(0., 0., 0.);
+
+
+
 		scintLength = 80.*cm;
 		scintWidth = 30.*cm;
 		scintHeight = 4.*cm;
-		G4double scintSeparation23 = 3.*cm; //separation between lower scintillators
-		G4double scintSeparation12 = 1.5*cm;//separation between upper scintillators
+		G4double scintSeparation23 = 0.5*cm; //separation between lower scintillators
+		G4double scintSeparation12 = 0.5*cm;//separation between upper scintillators
+		// 0.08,0.265,0.01
+		scintPiccoloLenght = 8*cm;
+		// scintPiccoloWidth = 26.5*cm;
+		scintPiccoloWidth = 31*cm;
+		scintPiccoloHeight = 1*cm;
 		// look at note for explanation of posFirstScint y compontent
-		posFirstScint  = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight + scintSeparation12 + scintHeight/4, 0.);
-		posSecondScint = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight/2, 0.);
-		posThirdScint  = G4ThreeVector(0., 0., 0.);
+		posFirstScint  = G4ThreeVector(0., scintPiccoloHeight/2 + scintSeparation23 + scintHeight + scintSeparation12 + scintPiccoloHeight/2, 1.5*cm);
+		posSecondScint = G4ThreeVector(0, scintPiccoloHeight/2 + scintSeparation23 + scintHeight/2, 0);
+		posThirdScint  = G4ThreeVector(0.*cm, 0., 1.5*cm);
 
 	#else
 
@@ -110,8 +127,8 @@ void DetectorConstruction::ComputeParameters()
 		scintLength = 80.*cm;
 		scintWidth = 30.*cm;
 		scintHeight = 4.*cm;
-		G4double scintSeparation23 = 8.*cm; //separation between lower scintillators
-		G4double scintSeparation12 = 1.*cm;//separation between upper scintillators
+		G4double scintSeparation23 = 3.*cm; //separation between lower scintillators
+		G4double scintSeparation12 = 4*cm;//separation between upper scintillators
 		posFirstScint  = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight/2 + scintSeparation12 + scintHeight/2, 0.);
 		posSecondScint = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight/4, 0.);
 		posThirdScint  = G4ThreeVector(0., 0., 0.);
@@ -317,17 +334,21 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 {
 
 	// G4double halfHadCaloHalfZ = (hadCaloFeThickness+hadCaloLArThickness)*hadCaloNumLayers/2;
-	G4Box* scintSmallSolid = new G4Box( "scintSmallSolid",//its name
-										scintLength/2, //halfX
-										scintHeight/4,//halfY
-										scintWidth/2); //halfZ
+	G4Box* scintPiccoloSolid = new G4Box( "scintSmallSolid",//its name
+										scintPiccoloLenght/2, //halfX
+										scintPiccoloHeight/4,//halfY
+										scintPiccoloWidth/2); //halfZ
+	// G4Box* scintSmallSolid = new G4Box( "scintSmallSolid",//its name
+	// 									scintLength/2, //halfX
+	// 									scintHeight/4,//halfY
+	// 									scintWidth/2); //halfZ
 	G4Box* scintBigSolid= new G4Box( "scintBigSolid",//its name
 										scintLength/2, //halfX
 										scintHeight/2,//halfY
 										scintWidth/2); //halfZ
 	#ifdef CERBERO_SOPRA
 
-		G4LogicalVolume* scintLogicFirst = new G4LogicalVolume( scintSmallSolid,//its solid
+		G4LogicalVolume* scintLogicFirst = new G4LogicalVolume( scintPiccoloSolid,//its solid
 															 plastic,//its material
 															 "scintLogicFirst");//its name
 
@@ -336,7 +357,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 															 plastic,//its material
 															 "scintLogicSecond");//its name
 
-		 G4LogicalVolume* scintLogicThird = new G4LogicalVolume( scintBigSolid,//its solid
+		 G4LogicalVolume* scintLogicThird = new G4LogicalVolume( scintPiccoloSolid,//its solid
 		 													 plastic,//its material
 		 													 "scintLogicThird");//its name
 
@@ -369,6 +390,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 		materialLogic->SetVisAttributes(new G4VisAttributes(G4Colour(0,0,1)));
 
 	#endif
+
+	G4Color
+		green(0.0,1.0,0.0),
+		blue(0.0,0.0,1.0),
+		red	(1,0,0),
+		white(1.0,1.0,1.0);
+
+	scintLogicFirst-> SetVisAttributes(new G4VisAttributes(green));
+	scintLogicSecond-> SetVisAttributes(new G4VisAttributes(white));
+	scintLogicThird-> SetVisAttributes(new G4VisAttributes(red));
+
 	physiFirstScint = new G4PVPlacement(0,	//no rotation
 				  posFirstScint,
 				  scintLogicFirst,		//its logical volume
@@ -426,11 +458,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 
 
 
-	G4Colour green(0,1,0);
-	G4Colour white(1,1,1);
-	scintLogicFirst->SetVisAttributes(new G4VisAttributes(green));
-	scintLogicSecond->SetVisAttributes(new G4VisAttributes(green));
-	scintLogicThird->SetVisAttributes(new G4VisAttributes(green));
+	// G4Colour green(0,1,0);
+	// G4Colour white(1,1,1);
+	// scintLogicFirst->SetVisAttributes(new G4VisAttributes(green));
+	// scintLogicSecond->SetVisAttributes(new G4VisAttributes(green));
+	// scintLogicThird->SetVisAttributes(new G4VisAttributes(green));
 	// hadLayerLogic->SetVisAttributes(new G4VisAttributes(white));
 	//hadLayerLogic->SetVisAttributes(G4VisAttributes::Invisible);
 	return physiFirstScint;
@@ -453,80 +485,80 @@ void DetectorConstruction::UpdateGeometry()
 
 
 }
-
-#include "G4FieldManager.hh"
-#include "G4UniformMagField.hh"
-#include "G4Mag_SpinEqRhs.hh"
-#include "G4ClassicalRK4.hh"
-#include "G4SimpleRunge.hh"
-#include "G4ChordFinder.hh"
-#include "G4MagIntegratorDriver.hh"
-#include "G4DormandPrince745.hh"
-#include "G4DormandPrinceRK78.hh"
-
-#include "G4EqEMFieldWithSpin.hh"
-#include "G4TransportationManager.hh"
-#include "G4PropagatorInField.hh"
-G4FieldManager* DetectorConstruction::GetLocalFieldManager()
-{
-  // pure magnetic field
-  G4ElectroMagneticField* fMagneticField =
-    new G4UniformMagField(G4ThreeVector(0, 0., 21*gauss));
-
-  // equation of motion with spin
-  // G4Mag_EqRhs* fEquation = new G4Mag_SpinEqRhs(fMagneticField);
-  //
-  // // local field manager
-  // G4FieldManager* fFieldManager = new G4FieldManager(fMagneticField);
-
-  G4EqEMFieldWithSpin* equation = new G4EqEMFieldWithSpin(fMagneticField);
-  G4FieldManager* fFieldManager
-      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-  fFieldManager->SetDetectorField(fMagneticField );
-
-  // default stepper Runge Kutta 4th order
-  // G4MagIntegratorStepper* fStepper = new G4ClassicalRK4( fEquation , 12); // spin needs 12 dof
-   // G4MagIntegratorStepper* fStepper = new G4SimpleRunge( fEquation , 12); // spin needs 12 dof
-G4MagIntegratorStepper* fStepper = new G4DormandPrinceRK78( equation , 12); // spin needs 12 dof
-  // add chord finder
-  G4double minStep           = 0.01*mm;
-
-   G4ChordFinder* chordFinder =
-				  new G4ChordFinder((G4MagneticField*)fMagneticField,minStep,fStepper);
-  G4double deltaChord        = 3.0*mm;
-       chordFinder->SetDeltaChord( deltaChord );
-
-       G4double deltaOneStep      = 0.01*mm;
-       fFieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
-
-       G4double deltaIntersection = 0.1*mm;
-       fFieldManager->SetDeltaIntersection(deltaIntersection);
-
-       G4TransportationManager* transportManager =
-                             G4TransportationManager::GetTransportationManager();
-
-       G4PropagatorInField* fieldPropagator =
-                                        transportManager->GetPropagatorInField();
-
-       G4double epsMin            = 2.5e-7*mm;
-       G4double epsMax            = 0.05*mm;
-
-       fieldPropagator->SetMinimumEpsilonStep(epsMin);
-       fieldPropagator->SetMaximumEpsilonStep(epsMax);
-
-
-
-
-
-
-//   G4MagInt_Driver* driver = new G4MagInt_Driver
-// (10*mm, fStepper, fStepper->GetNumberOfVariables());
-// G4ChordFinder* fChordFinder = new G4ChordFinder(driver);
-// fFieldManager->SetDeltaOneStep(1e-2); // improved tracking precision
-// fFieldManager->SetMinimumEpsilonStep(1e-2);
-// fFieldManager->SetMaximumEpsilonStep(1e-2);
-  // G4double fMinStep=1*mm;
-  // G4ChordFinder* fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper);
-  fFieldManager->SetChordFinder( chordFinder );
-  return fFieldManager;
-}
+//
+// #include "G4FieldManager.hh"
+// #include "G4UniformMagField.hh"
+// #include "G4Mag_SpinEqRhs.hh"
+// #include "G4ClassicalRK4.hh"
+// #include "G4SimpleRunge.hh"
+// #include "G4ChordFinder.hh"
+// #include "G4MagIntegratorDriver.hh"
+// #include "G4DormandPrince745.hh"
+// #include "G4DormandPrinceRK78.hh"
+//
+// #include "G4EqEMFieldWithSpin.hh"
+// #include "G4TransportationManager.hh"
+// #include "G4PropagatorInField.hh"
+// G4FieldManager* DetectorConstruction::GetLocalFieldManager()
+// {
+//   // pure magnetic field
+//   G4ElectroMagneticField* fMagneticField =
+//     new G4UniformMagField(G4ThreeVector(0, 0., 21*gauss));
+//
+//   // equation of motion with spin
+//   // G4Mag_EqRhs* fEquation = new G4Mag_SpinEqRhs(fMagneticField);
+//   //
+//   // // local field manager
+//   // G4FieldManager* fFieldManager = new G4FieldManager(fMagneticField);
+//
+//   G4EqEMFieldWithSpin* equation = new G4EqEMFieldWithSpin(fMagneticField);
+//   G4FieldManager* fFieldManager
+//       = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+//   fFieldManager->SetDetectorField(fMagneticField );
+//
+//   // default stepper Runge Kutta 4th order
+//   // G4MagIntegratorStepper* fStepper = new G4ClassicalRK4( fEquation , 12); // spin needs 12 dof
+//    // G4MagIntegratorStepper* fStepper = new G4SimpleRunge( fEquation , 12); // spin needs 12 dof
+// G4MagIntegratorStepper* fStepper = new G4DormandPrinceRK78( equation , 12); // spin needs 12 dof
+//   // add chord finder
+//   G4double minStep           = 0.01*mm;
+//
+//    G4ChordFinder* chordFinder =
+// 				  new G4ChordFinder((G4MagneticField*)fMagneticField,minStep,fStepper);
+//   G4double deltaChord        = 3.0*mm;
+//        chordFinder->SetDeltaChord( deltaChord );
+//
+//        G4double deltaOneStep      = 0.01*mm;
+//        fFieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
+//
+//        G4double deltaIntersection = 0.1*mm;
+//        fFieldManager->SetDeltaIntersection(deltaIntersection);
+//
+//        G4TransportationManager* transportManager =
+//                              G4TransportationManager::GetTransportationManager();
+//
+//        G4PropagatorInField* fieldPropagator =
+//                                         transportManager->GetPropagatorInField();
+//
+//        G4double epsMin            = 2.5e-7*mm;
+//        G4double epsMax            = 0.05*mm;
+//
+//        fieldPropagator->SetMinimumEpsilonStep(epsMin);
+//        fieldPropagator->SetMaximumEpsilonStep(epsMax);
+//
+//
+//
+//
+//
+//
+// //   G4MagInt_Driver* driver = new G4MagInt_Driver
+// // (10*mm, fStepper, fStepper->GetNumberOfVariables());
+// // G4ChordFinder* fChordFinder = new G4ChordFinder(driver);
+// // fFieldManager->SetDeltaOneStep(1e-2); // improved tracking precision
+// // fFieldManager->SetMinimumEpsilonStep(1e-2);
+// // fFieldManager->SetMaximumEpsilonStep(1e-2);
+//   // G4double fMinStep=1*mm;
+//   // G4ChordFinder* fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper);
+//   fFieldManager->SetChordFinder( chordFinder );
+//   return fFieldManager;
+// }

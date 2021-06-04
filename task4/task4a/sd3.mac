@@ -1,0 +1,5 @@
+/run/verbose 0
+/gps/particle pi-
+# non vado oltre 10 Gev perché poi la physics list non sarebbe valida
+/gps/energy 8 GeV
+/run/beamOn 1

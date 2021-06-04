@@ -32,7 +32,7 @@ Analysis::~Analysis()
 void Analysis::AddTrack( const G4Track * aTrack )
 {
   if (histos.size()>3) {
-    if (aTrack->GetDefinition()->GetPDGEncoding()!=11) return; // electrons
+    if (abs(aTrack->GetDefinition()->GetPDGEncoding())!=11) return; // electrons
 
     const G4ThreeVector & pos = aTrack->GetPosition();
     const G4ThreeVector & mom = aTrack->GetMomentumDirection();

@@ -342,7 +342,7 @@ G4FieldManager* DetectorConstruction::GetLocalFieldManager()
   // pure magnetic field
   G4MagneticField* fMagneticField =
     // new G4UniformMagField(G4ThreeVector(3.5e-3*tesla, 0., 0.));
-	new G4UniformMagField(G4ThreeVector(20*gauss, 0., 0.));
+	new G4UniformMagField(G4ThreeVector(21*gauss, 0., 0.));
   // equation of motion with spin
   G4Mag_EqRhs* fEquation = new G4Mag_SpinEqRhs(fMagneticField);
 

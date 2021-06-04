@@ -92,7 +92,7 @@ Simple PyROOT macro to read a root file and plot
 dacay time and decay position.
 """
 def analyseDecay(fname):
-    global file, c1, c2, c3, c4
+    global file, c1, c2, c3, c4, asymmetry_graph
 
     # load histograms from file
     file = TFile.Open(fname)
