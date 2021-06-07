@@ -597,25 +597,28 @@ void DetectorConstruction::ConstructSDandField()
 	SetSensitiveDetector("scintLogicFirst", sd);
 	SetSensitiveDetector("scintLogicSecond", sd);
 	SetSensitiveDetector("scintLogicThird", sd);
-    if(!fMagneticField) fMagneticField = new G4UniformMagField(G4ThreeVector(0, 0., 1*gauss));
+	
+	#ifdef CERBERO_SOPRA
+    	if(!fMagneticField) fMagneticField = new G4UniformMagField(G4ThreeVector(0, 0., 1*gauss));
 
-	// G4FieldManager* fMan
-	//   = G4TransportationManager::GetTransportationManager()
-	// 	  ->GetFieldManager();
-  G4FieldManager* fMan = new G4FieldManager(fMagneticField);
+		// G4FieldManager* fMan
+		//   = G4TransportationManager::GetTransportationManager()
+		// 	  ->GetFieldManager();
+	  G4FieldManager* fMan = new G4FieldManager(fMagneticField);
 
-  G4Mag_EqRhs* fEquation = new G4Mag_SpinEqRhs(fMagneticField);
+	  G4Mag_EqRhs* fEquation = new G4Mag_SpinEqRhs(fMagneticField);
 
-  G4MagIntegratorStepper* fStepper = new G4DormandPrinceRK78( fEquation , 12); // spin needs 12 dof
+	  G4MagIntegratorStepper* fStepper = new G4DormandPrinceRK78( fEquation , 12); // spin needs 12 dof
 
-  G4ChordFinder* fChordFinder = new G4ChordFinder( fMagneticField, 1*mm,fStepper);
-
-
-	fMan->SetDetectorField(fMagneticField);
-
+	  G4ChordFinder* fChordFinder = new G4ChordFinder( fMagneticField, 1*mm,fStepper);
 
 
-	fMan->SetChordFinder( fChordFinder );
+		fMan->SetDetectorField(fMagneticField);
 
-	scintLogicSecond->SetFieldManager(fMan,false);
+
+
+		fMan->SetChordFinder( fChordFinder );
+
+		scintLogicSecond->SetFieldManager(fMan,false);
+	#endif
 }
