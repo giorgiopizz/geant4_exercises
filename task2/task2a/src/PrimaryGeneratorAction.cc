@@ -25,9 +25,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   // if you don't update here, the default will be created, namely: 1 GeV
   // geantino
   // --> from here
-  // particle = G4ParticleTable::GetParticleTable()->FindParticle("pi-");
-  // gun->SetParticleDefinition(particle);
-  // gun->SetParticleEnergy(1*GeV);
+  particle = G4ParticleTable::GetParticleTable()->FindParticle("pi-");
+  gun->SetParticleDefinition(particle);
+  gun->SetParticleEnergy(1*GeV);
   // <-- to here
 
 }
@@ -47,11 +47,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // Ex 2a.2 : generate only one particle
   // --> from here
-  // G4double x0 = 0.*cm, y0 = 0.*cm, z0= 0.0*cm;
-  // G4cout<<"GeneratePrimaries : new event "<<G4BestUnit(G4ThreeVector(x0,y0,z0),"Length")<<G4endl;
-  // gun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
-  // gun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  // gun->GeneratePrimaryVertex(anEvent);
+  G4double x0 = 0.*cm, y0 = 0.*cm, z0= 0.0*cm;
+  G4cout<<"GeneratePrimaries : new event "<<G4BestUnit(G4ThreeVector(x0,y0,z0),"Length")<<G4endl;
+  gun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  gun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  gun->GeneratePrimaryVertex(anEvent);
   // <-- to here
 
 
