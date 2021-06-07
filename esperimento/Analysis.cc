@@ -54,11 +54,15 @@ void Analysis::AddTrack( const G4Track * aTrack )
 		    const G4ThreeVector & mom = aTrack->GetMomentumDirection();
 		    G4double time = aTrack->GetGlobalTime();
 
-			decays++;
-		    histos[fDecayPosZ]->Fill(pos.y()/m);
-		    histos[fDecayTime]->Fill((time-start)/microsecond);
-		    if (mom.y()>0) histos[fDecayTimeForward]->Fill(time/microsecond);
-		    else histos[fDecayTimeBackward]->Fill(time/microsecond);
+			histoManager->AddDecay();
+		    // histos[fDecayPosZ]->Fill(pos.y()/m);
+		    // histos[fDecayTime]->Fill((time-start)/microsecond);
+		    // if (mom.y()>0) histos[fDecayTimeForward]->Fill(time/microsecond);
+		    // else histos[fDecayTimeBackward]->Fill(time/microsecond);
+			// histoManager->HistoFill(fpos.y()/m);
+		    histoManager->HistoFill((time-start)/microsecond, fDecayTime);
+		    if (mom.y()>0)  histoManager->HistoFill(time/microsecond, fDecayTimeForward);
+		    else histoManager->HistoFill(time/microsecond, fDecayTimeBackward);
 		}
 	// }
 
@@ -96,31 +100,9 @@ void Analysis::AddEDepEM( G4double edep, G4int volCopyNum, G4double time)
 	}
 }
 
-void Analysis::PrepareNewEvent(const G4Event* /*anEvent*/)
+void Analysis::PrepareNewEvent(const G4Event* , HistoManager * histoManager)
 {
-	if (histos.size()==0){
-		for (int i=0;i<3;i++) thisRunTotEM[i]=0;
-		thisRunTotSecondaries = 0;
-
-		TH1D *h=0;
-		// create Histograms
-		histos.push_back(h=new TH1D("decayPos","Z Position of Decay",100,0.8*m,(0.8+2.24)*m) );
-		h->GetYaxis()->SetTitle("events");
-		h->GetXaxis()->SetTitle("t_{decay} #mus");
-		h->StatOverflows();
-		histos.push_back(h=new TH1D("decayTime","Time of Decay",200,0,11 ) ); //microsecond
-		h->GetYaxis()->SetTitle("events");
-		h->GetXaxis()->SetTitle("t_{decay} #mus");
-		h->StatOverflows();
-		histos.push_back(h=new TH1D("decayTimeForward","Time of Decay [Forward electron]",25,0,11) ); // microsecond
-		h->GetYaxis()->SetTitle("forward events");
-		h->GetXaxis()->SetTitle("t_{decay} #mus");
-		h->StatOverflows();
-		histos.push_back(h=new TH1D("decayTimeBackward","Time of Decay [Backward electron]",25,0,11) ); // microsecond
-		h->GetYaxis()->SetTitle("backward events");
-		h->GetXaxis()->SetTitle("t_{decay} #mus");
-		h->StatOverflows();
-	}
+	histoManager = histo;
 	//Reset variables relative to this event
 	thisEventSecondaries = 0;
 	for (int i=0;i<3;i++) thisEventTotEM[i]=0;

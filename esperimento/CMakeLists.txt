@@ -64,7 +64,7 @@ set(AnaEx02_SCRIPTS
     muonFast.mac
     script.py
   )
-
+set(CMAKE_AUTOMOC ON)
 foreach(_script ${AnaEx02_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}

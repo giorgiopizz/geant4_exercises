@@ -26,10 +26,14 @@ class G4Track;
 class Analysis {
 public:
   static Analysis* GetInstance() {
-    if ( Analysis::singleton[G4Threading::G4GetThreadId()] == NULL ) Analysis::singleton.insert( std::make_pair( G4Threading::G4GetThreadId() , new Analysis() ) );
+    // if (  );
     singletonMap_t::iterator it = Analysis::singleton.find(G4Threading::G4GetThreadId());
     if (it!=Analysis::singleton.end()){
         return it->second;
+    }
+    else{
+         Analysis::singleton.insert( std::make_pair( G4Threading::G4GetThreadId() , new Analysis() ) );
+         return Analysis::singleton.find(G4Threading::G4GetThreadId())->second;
     }
     // for(it=Analysis::singleton.begin(); it!=Analysis::singleton.end(); ++it){
     //     if (it->first == G4Threading::G4GetThreadId())  return it->second;

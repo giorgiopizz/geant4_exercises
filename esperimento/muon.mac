@@ -57,7 +57,7 @@
 /gps/ene/gradient 1.
 /gps/ene/intercept 1.
 
-/gps/polarization 0. -1. 0.
+#/gps/polarization 0. -1. 0.
 
 #/gps/particle mu-
 #/gps/energy 1. GeV
@@ -72,4 +72,4 @@
 
 # usato per avere la nostra stessa statistica: 100000
 #/random/setSeeds 9 12312312312
-/run/beamOn 300000
+/run/beamOn 6000000

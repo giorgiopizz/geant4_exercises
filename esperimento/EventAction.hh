@@ -15,6 +15,7 @@
 
 #include "G4UserEventAction.hh"
 #include "G4String.hh"
+#include "HistoManager.hh"
 class G4Event;
 /*!
  * \brief User's EventAction class
@@ -33,8 +34,9 @@ public:
 	//! Beginning of event
 	void BeginOfEventAction(const G4Event* anEvent);
 	//! Digitize hits and store information
-	void EndOfEventAction(const G4Event* anEvent);
-private:
+	// void EndOfEventAction(const G4Event* anEvent);
+// private:
+// 	HistoManager * histoManager;
 };
 
 #endif /* EVENTACTION_HH_ */

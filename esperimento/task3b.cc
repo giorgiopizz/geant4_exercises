@@ -49,15 +49,15 @@
 int main(int argc,char** argv)
 {
   // Run manager
-  G4RunManager * runManager = new G4RunManager();
-  // #ifdef G4MULTITHREADED
-  // G4MTRunManager* runManager = new G4MTRunManager;
-  // runManager->SetNumberOfThreads(2*(G4Threading::G4GetNumberOfCores()));
-  // G4cout << "Multithreaded" << G4endl;
-  // #else
-  // G4RunManager* runManager = new G4RunManager;
-  // G4cout << "Single threaded" << G4endl;
-  // #endif
+  // G4RunManager * runManager = new G4RunManager();
+  #ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(2*(G4Threading::G4GetNumberOfCores()));
+  G4cout << "Multithreaded" << G4endl;
+  #else
+  G4RunManager* runManager = new G4RunManager;
+  G4cout << "Single threaded" << G4endl;
+  #endif
   // mandatory Initialization classes
   G4VUserDetectorConstruction* detector = new DetectorConstruction();
   runManager->SetUserInitialization(detector);
@@ -89,24 +89,24 @@ int main(int argc,char** argv)
   // run->SetPhysicsList(phys);
 
   // mandatory User Action classes
-  G4VUserPrimaryGeneratorAction* gen_action = new PrimaryGeneratorAction();
-  runManager->SetUserAction(gen_action);
-
-
-  // Optional User Action classes
-  // Stacking Action
-  StackingAction* aStackingAction = new StackingAction();
-  runManager->SetUserAction(aStackingAction);
-  //Stepping Action
-  SteppingAction* aSteppingAction = new SteppingAction();
-  runManager->SetUserAction(aSteppingAction);
-  //Event action (handles for beginning / end of event)
-  EventAction* anEventAction = new EventAction();
-  runManager->SetUserAction( anEventAction );
-
-  //Run action (handles for beginning / end of event)
-  RunAction* aRunAction = new RunAction();
-  runManager->SetUserAction( aRunAction );
+  // G4VUserPrimaryGeneratorAction* gen_action = new PrimaryGeneratorAction();
+  // runManager->SetUserAction(gen_action);
+  //
+  //
+  // // Optional User Action classes
+  // // Stacking Action
+  // StackingAction* aStackingAction = new StackingAction();
+  // runManager->SetUserAction(aStackingAction);
+  // //Stepping Action
+  // SteppingAction* aSteppingAction = new SteppingAction();
+  // runManager->SetUserAction(aSteppingAction);
+  // //Event action (handles for beginning / end of event)
+  // EventAction* anEventAction = new EventAction();
+  // runManager->SetUserAction( anEventAction );
+  //
+  // //Run action (handles for beginning / end of event)
+  // RunAction* aRunAction = new RunAction();
+  // runManager->SetUserAction( aRunAction );
 
 
 

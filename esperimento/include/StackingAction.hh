@@ -13,9 +13,9 @@
 
 #include "globals.hh"
 #include "G4UserStackingAction.hh"
-
+#include "Trigger.hh"
 class G4Track;
-class Analysis;
+// class Analysis;
 
 class StackingAction : public G4UserStackingAction {
 
@@ -26,9 +26,8 @@ public:
 
   virtual G4ClassificationOfNewTrack ClassifyNewTrack( const G4Track* aTrack );
 
-private:
-  Analysis * analysis;
+// private:
+  // Analysis * analysis;
 };
 
 #endif
-

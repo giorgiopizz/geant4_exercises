@@ -11,6 +11,10 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "G4ThreeVector.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4MagneticField.hh"
+#include "tls.hh"
+
+// #include "MyField.hh"
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
@@ -69,9 +73,11 @@ private:
   // G4VPhysicalVolume* ConstructEMCalo();
   //! Construct geometry of the hadronic Calorimeter
   G4VPhysicalVolume* ConstructScintillator();
-
+  virtual void ConstructSDandField();
   //! Define local magnetic field
-  G4FieldManager* GetLocalFieldManager();
+  // G4FieldManager* GetLocalFieldManager();
+
+  static G4ThreadLocal G4MagneticField* fMagneticField;
 private:
 
   //! \name Materials
@@ -109,6 +115,8 @@ private:
   G4double scintWidth;
   G4double scintHeight;
 
+  G4double threeScintHeight;
+
 
   G4ThreeVector posFirstScint;
   G4ThreeVector posSecondScint;
@@ -137,9 +145,13 @@ private:
 
   //! \name Geometry had calo
   //@{
+
+  G4LogicalVolume* scintLogicSecond;
+
   G4VPhysicalVolume* physiFirstScint;
   G4VPhysicalVolume* physiSecondScint;
   G4VPhysicalVolume* physiThirdScint;
+  G4VPhysicalVolume* physiThreeScint;
   G4VPhysicalVolume* Material;
   //@}
   //! \name Parameters for had calo
