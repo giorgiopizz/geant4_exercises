@@ -102,8 +102,8 @@ void DetectorConstruction::ComputeParameters()
 		scintLength = 80.*cm;
 		scintWidth = 30.*cm;
 		scintHeight = 4.*cm;
-		G4double scintSeparation23 = 3.*cm; //separation between lower scintillators
-		G4double scintSeparation12 = 1.5*cm;//separation between upper scintillators
+		G4double scintSeparation23 = 2.*cm; //separation between lower scintillators
+		G4double scintSeparation12 = 2*cm;//separation between upper scintillators
 		// look at note for explanation of posFirstScint y compontent
 		threeScintHeight = scintHeight + scintSeparation23 + scintHeight + scintSeparation12 + scintHeight/2;
 		posFirstScint  = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight + scintSeparation12 + scintHeight/4, 0.);
@@ -123,7 +123,7 @@ void DetectorConstruction::ComputeParameters()
 		scintLength = 80.*cm;
 		scintWidth = 30.*cm;
 		scintHeight = 4.*cm;
-		G4double scintSeparation23 = 8.*cm; //separation between lower scintillators
+		G4double scintSeparation23 = 8.*cm; // per materiale in mezzo è 8 cm
 		G4double scintSeparation12 = 1.*cm;//separation between upper scintillators
 		posFirstScint  = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight/2 + scintSeparation12 + scintHeight/2, 0.);
 		posSecondScint = G4ThreeVector(0., scintHeight/2 + scintSeparation23 + scintHeight/4, 0.);
@@ -339,10 +339,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 										scintHeight/2,//halfY
 										scintWidth/2); //halfZ
 
-    G4Box * threeScintSolid =  new G4Box( "threeScintSolid",//its name
-										scintLength/2, //halfX
-										threeScintHeight/2,//halfY
-										scintWidth/2); //halfZ
+    // G4Box * threeScintSolid =  new G4Box( "threeScintSolid",//its name
+	// 									scintLength/2, //halfX
+	// 									threeScintHeight/2,//halfY
+	// 									scintWidth/2); //halfZ
 
 
 	#ifdef CERBERO_SOPRA
@@ -361,9 +361,9 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 		 													 "scintLogicThird");//its name
 
 
-		 G4LogicalVolume* threeScintLogic = new G4LogicalVolume( threeScintSolid,//its solid
-		 													 air,//its material
-		 													 "threeScintLogic");//its name
+		 // G4LogicalVolume* threeScintLogic = new G4LogicalVolume( threeScintSolid,//its solid
+		 // 													 air,//its material
+		 // 													 "threeScintLogic");//its name
          // physiThreeScint = new G4PVPlacement(0,	//no rotation
 	 		// 		  G4ThreeVector(0, 0 ,0),
 	 		// 		  threeScintLogic,		//its logical volume
@@ -397,7 +397,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 							  logicWorld,
 							  false,
 							  4);			//copy number
-		materialLogic->SetVisAttributes(new G4VisAttributes(G4Colour(0,0,1)));
+		materialLogic->SetVisAttributes(new G4VisAttributes(G4Colour(1,1,1)));
 
 	#endif
 	physiFirstScint = new G4PVPlacement(0,	//no rotation
@@ -421,10 +421,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructScintillator()
 
 
 	//secondo scintillatore ruotato con campo magnetico
-	G4RotationMatrix* rotationMatrix = new G4RotationMatrix();
-	  rotationMatrix->rotateY(90.*deg);
-	  physiSecondScint = new G4PVPlacement(rotationMatrix,//rm,
-	  // physiSecondScint = new G4PVPlacement(0,
+	// G4RotationMatrix* rotationMatrix = new G4RotationMatrix();
+	  // rotationMatrix->rotateY(90.*deg);
+	  // physiSecondScint = new G4PVPlacement(rotationMatrix,//rm,
+	  physiSecondScint = new G4PVPlacement(0,
 							  posSecondScint,
 							  scintLogicSecond,
 							  "SecondSensor",
@@ -597,7 +597,7 @@ void DetectorConstruction::ConstructSDandField()
 	SetSensitiveDetector("scintLogicFirst", sd);
 	SetSensitiveDetector("scintLogicSecond", sd);
 	SetSensitiveDetector("scintLogicThird", sd);
-	
+
 	#ifdef CERBERO_SOPRA
     	if(!fMagneticField) fMagneticField = new G4UniformMagField(G4ThreeVector(0, 0., 1*gauss));
 

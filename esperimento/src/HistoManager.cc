@@ -53,8 +53,9 @@ namespace {
 
 
 HistoManager::HistoManager()
-:fRootFile(0),
-decays(0)
+// :fRootFile(0),
+:decays(0),
+fFactoryOn(false)
  // fNtuple1(0), fNtuple2(0),
  // fEabs(0.), fEgap(0.) ,fLabs(0.), fLgap(0.)
 {
@@ -78,7 +79,7 @@ decays(0)
 
 HistoManager::~HistoManager()
 {
-  if (fRootFile) delete fRootFile;
+  // if (fRootFile) delete fRootFile;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,6 +89,76 @@ void HistoManager::Book()
   // Creating a tree container to handle histograms and ntuples.
   // This tree is associated to an output file.
   //
+
+
+
+//   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+//   analysisManager->SetVerboseLevel(1);
+//   // Only merge in MT mode to avoid warning when running in Sequential mode
+// #ifdef G4MULTITHREADED
+//   analysisManager->SetNtupleMerging(true);
+// #endif
+//
+//   // Create directories
+//   analysisManager->SetHistoDirectoryName("histo");
+//   analysisManager->SetNtupleDirectoryName("ntuple");
+//
+//   // Open an output file
+//   //
+//   G4bool fileOpen = analysisManager->OpenFile("AnaEx02");
+//   if (! fileOpen) {
+//     G4cerr << "\n---> HistoManager::Book(): cannot open "
+//            << analysisManager->GetFileName() << G4endl;
+//     return;
+//   }
+//
+//   // Create histograms.
+//   // Histogram ids are generated automatically starting from 0.
+//   // The start value can be changed by:
+//   // analysisManager->SetFirstHistoId(1);
+//
+//
+//   // id = 0
+//   analysisManager->CreateH1("histo_tot","Time of Decay",200,0,11 );
+//   // id = 1
+//   analysisManager->CreateH1("histo_up","Time of Decay [Up]",30,0,11);
+//   // id = 2
+//   analysisManager->CreateH1("histo_down","Time of Decay [Down]",30,0,11);
+//
+//   // G4cout << "\n\n Histo creati!!!\n\n" << G4endl;
+//   // Create ntuples.
+//   // Ntuples ids are generated automatically starting from 0.
+//   // The start value can be changed by:
+//   // analysisManager->SetFirstMtupleId(1);
+//
+//   // Create 1st ntuple (id = 0)
+//   analysisManager->CreateNtuple("ntuple_tot", "decays");
+//   analysisManager->CreateNtupleDColumn("decay"); // column Id = 0
+//   analysisManager->FinishNtuple();
+//
+//   // Create 2nd ntuple (id = 1)
+//   //
+//   analysisManager->CreateNtuple("ntuple_up", "decays up");
+//   analysisManager->CreateNtupleDColumn("up"); // column Id = 0
+//   analysisManager->FinishNtuple();
+//
+//   analysisManager->CreateNtuple("ntuple_down", "decays down");
+//   analysisManager->CreateNtupleDColumn("down"); // column Id = 0
+//   analysisManager->FinishNtuple();
+//
+//
+//   fFactoryOn = true;
+//
+//   G4cout << "\n----> Output file is open in "
+//          << analysisManager->GetFileName() << "."
+//          << analysisManager->GetFileType() << G4endl;
+//
+//
+
+
+
+
+
   G4String fileName = "AnaEx02.root";
   fRootFile = new TFile(fileName,"RECREATE");
   if (! fRootFile) {
@@ -100,22 +171,36 @@ void HistoManager::Book()
 
   TH1D *h=0;
   // create Histograms
-  histos.push_back(h=new TH1D("decayPos","Z Position of Decay",100,0.8*m,(0.8+2.24)*m) );
+  // histos.push_back(h=new TH1D("decayPos","Z Position of Decay",100,0.8*m,(0.8+2.24)*m) );
+  // h->GetYaxis()->SetTitle("events");
+  // h->GetXaxis()->SetTitle("t_{decay} #mus");
+  // h->StatOverflows();
+  histos.push_back(h=new TH1D("histo_tot","Time of Decay",200,0,11 ) ); //microsecond
   h->GetYaxis()->SetTitle("events");
   h->GetXaxis()->SetTitle("t_{decay} #mus");
   h->StatOverflows();
-  histos.push_back(h=new TH1D("decayTime","Time of Decay",200,0,11 ) ); //microsecond
-  h->GetYaxis()->SetTitle("events");
+  histos.push_back(h=new TH1D("histo_up","Time of Decay [Up]",200,0,11) ); // microsecond
+  h->GetYaxis()->SetTitle("up events");
   h->GetXaxis()->SetTitle("t_{decay} #mus");
   h->StatOverflows();
-  histos.push_back(h=new TH1D("decayTimeForward","Time of Decay [Forward electron]",30,0,11) ); // microsecond
-  h->GetYaxis()->SetTitle("forward events");
+  histos.push_back(h=new TH1D("histo_down","Time of Decay [Down]",200,0,11) ); // microsecond
+  h->GetYaxis()->SetTitle("down events");
   h->GetXaxis()->SetTitle("t_{decay} #mus");
   h->StatOverflows();
-  histos.push_back(h=new TH1D("decayTimeBackward","Time of Decay [Backward electron]",30,0,11) ); // microsecond
-  h->GetYaxis()->SetTitle("backward events");
-  h->GetXaxis()->SetTitle("t_{decay} #mus");
-  h->StatOverflows();
+
+  // TTree * tree = new TTree("T", "decays");
+  // tree->Branch()
+
+  // ntuple_tot = new TNtuple("decay ntuple_tot", "decays", "decay");
+  // ntuple_up = new TNtuple("decay ntuple_up", "decay up", "decay up");
+  // ntuple_down = new TNtuple("decay ntuple_down", "decay down ", "decay down");
+  // TTree * ntuple = 0;
+  // ntuples.push_back(ntuple = new TTree("ntuple_tot", "decays"));
+  // ntuple->Branch( "decay", &fTot, "decay/D");
+  // ntuples.push_back(ntuple = new TTree("ntuple_up", "decay up"));
+  // ntuple->Branch( "up", &fUp, "up/D");
+  // ntuples.push_back(ntuple = new TTree("ntuple_down", "decay down "));
+  // ntuple->Branch( "down", &fDown, "down/D");
 
   // id = 0
   // fHisto[0] = new TH1D("EAbs", "Edep in absorber (MeV)", 100, 0., 800*CLHEP::MeV);
@@ -143,10 +228,63 @@ void HistoManager::Book()
   G4cout << "\n----> Output file is open in " << fileName << G4endl;
 }
 
+void HistoManager::Fill(double x, G4int i){
+
+    // G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    // if (i>0){
+    //     analysisManager->FillH1(0, x);
+    //     analysisManager->FillH1(1, x);
+    //     analysisManager->FillNtupleDColumn(0, 0, x);
+    //     analysisManager->AddNtupleRow(0);
+    //     analysisManager->FillNtupleDColumn(1, 0, x);
+    //     analysisManager->AddNtupleRow(1);
+    // }
+    // else{
+    //     analysisManager->FillH1(0, x);
+    //     analysisManager->FillH1(2, x);
+    //     analysisManager->FillNtupleDColumn(0, 0, x);
+    //     analysisManager->AddNtupleRow(0);
+    //     analysisManager->FillNtupleDColumn(2, 0, x);
+    //     analysisManager->AddNtupleRow(2);
+    // }
+
+    if (i>0){
+        // fTot = x;
+        // if (ntuples[0]) ntuples[0]->Fill();
+        // fUp = x;
+        // if (ntuples[1]) ntuples[1]->Fill();
+
+        histos[0]->Fill(x);
+        histos[1]->Fill(x);
+    }
+    else{
+        // fTot = x;
+        // if (ntuples[0]) ntuples[0]->Fill();
+        // fDown = x;
+        // if (ntuples[2]) ntuples[2]->Fill();
+
+        histos[0]->Fill(x);
+        histos[2]->Fill(x);
+    }
+
+}
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::Save()
 {
+
+//     if (! fFactoryOn) return;
+//
+// G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+// analysisManager->Write();
+// analysisManager->CloseFile();
+//
+// G4cout << "\n----> Histograms and ntuples are saved\n" << G4endl;
+//
+// delete G4AnalysisManager::Instance();
+// fFactoryOn = false;
   if (! fRootFile) return;
 
   fRootFile->Write();       // Writing the histograms to the file
@@ -154,6 +292,7 @@ void HistoManager::Save()
 
   G4cout << "\n----> Histograms are saved\n" << G4endl;
   G4cout << "\nTot decays: " << decays <<"\n\n" << G4endl;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

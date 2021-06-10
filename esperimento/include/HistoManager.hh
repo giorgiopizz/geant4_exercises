@@ -42,8 +42,12 @@ class TTree;
 // class TH1D;
 // #include "TH1D.h"
 #include <TH1D.h>
-const G4int kMaxHisto = 4;
+#include <TNtuple.h>
+#include <TTree.h>
 
+
+const G4int kMaxHisto = 4;
+// #include "g4root.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HistoManager
@@ -58,14 +62,27 @@ class HistoManager
 private:
     HistoManager();
     static HistoManager* singleton;
+
     std::vector<TH1*> histos;
+    // std::vector<TTree*> ntuples;
+
+    // std::vector<TNtuple*> ntuples;
+    TFile*   fRootFile;
+    double fTot, fUp, fDown;
     int decays;
 public:
-    void HistoFill(double x, int i) {histos[i]->Fill(x);}
+    // void HistoFill(double x, int i) {histos[i]->Fill(x);}
+    void Fill(double x, G4int i);
     void AddDecay() {decays++;}
     int numDecays() { return decays;}
   private:
-    TFile*   fRootFile;
+
+     G4bool fFactoryOn;
+
+
+
+
+
     // TH1D*    fHisto[kMaxHisto];
     // TTree*   fNtuple1;
     // TTree*   fNtuple2;

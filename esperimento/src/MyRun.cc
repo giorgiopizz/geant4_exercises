@@ -72,8 +72,8 @@ void MyRun::RecordEvent(const  G4Event* evt )
            	    }
             }
             // if (start!=-1 && (time-start)>100*ns){
-            else if (hit->GetProcess()>0){
-
+            // else if (hit->GetProcess()>0){
+            else{
                 // stop event
 
     			// G4cout << "\n\nsegnale stop\n\n" << G4endl;
@@ -88,9 +88,13 @@ void MyRun::RecordEvent(const  G4Event* evt )
     		    // if (mom.y()>0) histos[fDecayTimeForward]->Fill(time/microsecond);
     		    // else histos[fDecayTimeBackward]->Fill(time/microsecond);
     			// histoManager->HistoFill(fpos.y()/m);
-    		    HistoManager::GetInstance()->HistoFill((time-start)/microsecond, 1);
-    		    if (hit->GetDirection()>0)  HistoManager::GetInstance()->HistoFill(time/microsecond, 2);
-    		    else HistoManager::GetInstance()->HistoFill(time/microsecond, 3);
+
+
+    		    // HistoManager::GetInstance()->HistoFill((time-start)/microsecond, 1);
+    		    // if (hit->GetDirection()>0)  HistoManager::GetInstance()->HistoFill((time-start)/microsecond, 2);
+    		    // else HistoManager::GetInstance()->HistoFill((time-start)/microsecond, 3);
+
+                HistoManager::GetInstance()->Fill((time-start)/microsecond, hit->GetDirection());
     		}
 
 

@@ -44,16 +44,7 @@ def asymmetry_function(x,par):
     return par[0]*cos(par[1]*x[0])+par[2]
 
 
-# set fit range, parameter names and start values
-myfit = TF1('myfit', decay, 0., 20.e3,2)
-myfit.SetParName(0,'A')
-myfit.SetParameter(0,10000.)
-myfit.SetParName(1,'tau')
-myfit.SetParameter(1,200.)
 
-# set fit line style
-myfit.SetLineColor(kRed)
-myfit.SetLineWidth(1)
 
 
 
@@ -72,8 +63,8 @@ myspinfit.SetParName(4,'delta')
 myspinfit.SetParameter(4,0)
 
 # set fit line style
-myfit.SetLineColor(kRed)
-myfit.SetLineWidth(1)
+# myfit.SetLineColor(kRed)
+# myfit.SetLineWidth(1)
 myspinfit.SetLineColor(kRed)
 myspinfit.SetLineWidth(1)
 
@@ -89,6 +80,40 @@ myAsymmetryF.SetParameter(2,0)
 myAsymmetryF.SetLineColor(kRed)
 myAsymmetryF.SetLineWidth(1)
 
+
+
+def decay_double(x,par):
+    return par[0]*exp(-x[0]/par[1])+par[2]*exp(-x[0]/par[3])+par[4]
+
+
+
+# set fit range, parameter names and start values
+myfit = TF1('myfit', decay_double, 0., 20.e3,3)
+myfit.SetParName(0,'A')
+myfit.SetParameter(0,10000.)
+myfit.SetParName(1,'tau')
+myfit.SetParameter(1,200.)
+
+
+
+myfit2 = TF1('myfit2', decay_double, 0.2, 11e+3,5)
+myfit2.SetParName(0,'#N_mu^-')
+myfit2.SetParameter(0,10000.)
+myfit2.SetParLimits(0,0,1000000)
+myfit2.SetParName(1,'#tau_mu^-')
+myfit2.SetParameter(1,0.717)
+myfit2.SetParName(2,'#N_mu^+')
+myfit2.SetParLimits(2,0,1000000)
+myfit2.SetParameter(2,20000)
+myfit2.SetParName(3,'#tau_mu^+')
+myfit2.SetParameter(3,2.197)
+myfit2.SetParName(4,'Bkg')
+myfit2.SetParameter(4,0)
+
+# set fit line style
+myfit2.SetLineColor(kRed)
+myfit2.SetLineWidth(1)
+
 """Read root file.
 
 Simple PyROOT macro to read a root file and plot
@@ -103,33 +128,14 @@ def analyseDecay(fname):
 
     # draw histogram and fit
     c1 = TCanvas('c1','Decay Time',10,10,700,500)
-    file.decayTime.Draw()
-    def decay_double(x,par):
-        return par[0]*exp(-x[0]/par[1])+par[2]*exp(-x[0]/par[3])+par[4]
+    file.histo_tot.Draw()
 
-    myfit2 = TF1('myfit2', decay_double, 0.2, 20 ,5)
-    myfit2.SetParName(0,'#N_mu^-')
-    myfit2.SetParameter(0,10000.)
-    myfit2.SetParLimits(0,0,1000000)
-    myfit2.SetParName(1,'#tau_mu^-')
-    myfit2.FixParameter(1,0.717)
-    myfit2.SetParName(2,'#N_mu^+')
-    myfit2.SetParLimits(2,0,1000000)
-    myfit2.SetParameter(2,10000)
-    myfit2.SetParName(3,'#tau_mu^+')
-    myfit2.FixParameter(3,2.197)
-    myfit2.SetParName(4,'Bkg')
-    myfit2.FixParameter(4,0)
 
-    # set fit line style
-    myfit2.SetLineColor(kRed)
-    myfit2.SetLineWidth(1)
-
-    file.decayTime.Fit(myfit2, "R")
-    myfit2.ReleaseParameter(1)
+    # file.histo_tot.Fit(myfit2, "R")
+    # myfit2.ReleaseParameter(1)
     #myfit2.FixParameter(0, myfit2.GetParameter(0))
     #myfit2.FixParameter(2, myfit2.GetParameter(2))
-    file.decayTime.Fit(myfit2, "R")
+    file.histo_tot.Fit(myfit, "R")
     c1.Modified()
     c1.Update()
     #
@@ -176,22 +182,22 @@ def analyseDecay(fname):
     # asymmetry_histo.Fit(myAsymmetryF)
     # c4.Modified()
     # c4.Update()
-
-def calcLande(omega,bfield):
-    omega=omega*1.e6     # MHz
-    hbar=1.054e-34  # J s
-    q=1.602e-19     #  C
-    c=2.998e8 # m/s
-    m=105.658e6*q/c**2
-    magneton=q*hbar/(2.*m)  # 4.485e-26 * J/T
-
-    g=omega*hbar/(magneton*bfield)
-    g_pdg = 11659209e-10*2+2
-    print 'Lande PDG g=', g_pdg
-    print 'Lande g=',g
-    print 't = ',(g-g_pdg)/12e-10
-
-    return g
+#
+# def calcLande(omega,bfield):
+#     omega=omega*1.e6     # MHz
+#     hbar=1.054e-34  # J s
+#     q=1.602e-19     #  C
+#     c=2.998e8 # m/s
+#     m=105.658e6*q/c**2
+#     magneton=q*hbar/(2.*m)  # 4.485e-26 * J/T
+#
+#     g=omega*hbar/(magneton*bfield)
+#     g_pdg = 11659209e-10*2+2
+#     print 'Lande PDG g=', g_pdg
+#     print 'Lande g=',g
+#     print 't = ',(g-g_pdg)/12e-10
+#
+#     return g
 
 
 if __name__=='__main__':
@@ -207,4 +213,4 @@ if __name__=='__main__':
     # c4.Update()
     gApplication.Run()
 
-print "\n to quit press Ctrl-D"
+# print "\n to quit press Ctrl-D"

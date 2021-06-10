@@ -73,21 +73,21 @@ G4bool SensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
               if (thistrack->GetCreatorProcess()->GetProcessType()==fDecay || thistrack->GetCreatorProcess()->GetProcessType()==fHadronic) pt = 1;
               hit->SetProcess(pt);
               // if (hit){
-                  // G4cout << "memorizzo hit" << G4endl;
-                  hit->SetLayer(copyNo);
-                  // G4cout << "si rompe?1" << G4endl;
-                  hit->SetEdep(step->GetTotalEnergyDeposit());
-                  // G4cout << "si rompe?2" << G4endl;
+              // G4cout << "memorizzo hit" << G4endl;
+              hit->SetLayer(copyNo);
+              // G4cout << "si rompe?1" << G4endl;
+              hit->SetEdep(step->GetTotalEnergyDeposit());
+              // G4cout << "si rompe?2" << G4endl;
 
-                  // hit->SetProcess();
+              // hit->SetProcess();
 
-                  hit->SetTime(thistrack->GetGlobalTime() + step->GetDeltaTime());
-                  G4int dir = 0;
-                  if (thistrack->GetMomentumDirection().y()>0)  dir = +1;
-                  else  dir = -1;
-                  hit->SetDirection(dir);
-                  // G4cout << "si rompe?3" << G4endl;
-                  hitCollection->insert(hit);
+              hit->SetTime(thistrack->GetGlobalTime() + step->GetDeltaTime());
+              G4int dir = 0;
+              if (thistrack->GetMomentumDirection().y()>0)  dir = +1;
+              else  dir = -1;
+              hit->SetDirection(dir);
+              // G4cout << "si rompe?3" << G4endl;
+              hitCollection->insert(hit);
               // }
           }
      }

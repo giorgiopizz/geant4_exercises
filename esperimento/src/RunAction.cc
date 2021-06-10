@@ -54,6 +54,7 @@ G4Run* RunAction::GenerateRun()
 void RunAction::BeginOfRunAction(const G4Run* aRun )
 {
 	// G4AnalysisManager * analysisManager = G4Analysis::ManagerInstance("root");
+	// HistoManager::GetInstance()->Book();
 	if (IsMaster()){
 		G4cout << "### Run " << aRun->GetRunID() << " starts (master)." << G4endl;
 		HistoManager::GetInstance()->Book();
@@ -72,7 +73,7 @@ void RunAction::EndOfRunAction( const G4Run* aRun )
 	// Analysis::GetInstance()->EndOfRun(aRun);
 	// std::cout << "\n\n Number of decays: " << Analysis::GetInstance()->numDecays() << std::endl;
 	if (IsMaster()) HistoManager::GetInstance()->Save();
-
+	// HistoManager::GetInstance()->Save();
     const MyRun* theRun = static_cast<const MyRun*> (aRun);
     // if(IsMaster())
     // {
