@@ -115,20 +115,20 @@ def analyseDecay():
     global file, file2, c1, c2, h
 
     # load histograms from file
-    file = TFile.Open("histoEnergy.root")
+    file = TFile.Open("histoEnergy_"+argv[1]+".root")
     file.ls()
-    file2 = TFile.Open("tree_run0.root")
-    file2.ls()
+    # file2 = TFile.Open("tree_run0.root")
+    # file2.ls()
     #draw histogram and fit
     c1 = TCanvas('c1','Energy Distribution',10,10,1800,1200)
     h = file.EnDis
 
     h1 = h.RebinX(5)
-    max = h1.FindLastBinAbove()
-    h1.GetXaxis().SetRange(1,max)
+    # max = h1.FindLastBinAbove()
+    h1.GetXaxis().SetRange(1,int(argv[2]))
     h1.Draw()
     # c1.SetLogy()
-    c1.SaveAs("histo_"+argv[1]+".png")
+    c1.SaveAs("histo_"+argv[1]+"_zoom.png")
     c1.Modified()
     c1.Update()
 

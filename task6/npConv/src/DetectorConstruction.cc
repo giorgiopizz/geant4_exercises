@@ -81,16 +81,16 @@ void DetectorConstruction::DefineMaterials()
   G4int n_H_Atoms = 2;
   G4int n_C_Atoms = 1;
 
-  PE_Mat = new G4Material("PEMat", PE_density, PE_comp_Atoms);
-
-  PE_Mat->AddElement(H,n_H_Atoms);
-  PE_Mat->AddElement(C,n_C_Atoms);
+  // PE_Mat = new G4Material("PEMat", PE_density, PE_comp_Atoms);
+  //
+  // PE_Mat->AddElement(H,n_H_Atoms);
+  // PE_Mat->AddElement(C,n_C_Atoms);
 
 
   // PE_Mat = man->FindOrBuildMaterial("G4_Al");
   // PE_Mat = man->FindOrBuildMaterial("G4_C");
   // PE_Mat = man->FindOrBuildMaterial("G4_Au");
-  // PE_Mat = man->FindOrBuildMaterial("G4_Cu");
+  PE_Mat = man->FindOrBuildMaterial("G4_Cu");
 
 
   if (!PE_Mat)   G4cout << "Problems making Cu Material " << G4endl;
