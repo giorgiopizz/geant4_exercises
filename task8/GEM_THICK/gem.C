@@ -16,14 +16,14 @@
 #include <TGeoMatrix.h>
 #include <TGeoCompositeShape.h>
 
-#include "ComponentAnsys123.hh"
-#include "ViewField.hh"
-#include "MediumMagboltz.hh"
-#include "Sensor.hh"
-#include "AvalancheMicroscopic.hh"
-#include "AvalancheMC.hh"
-#include "Random.hh"
-#include "Plotting.hh"
+#include "Garfield/ComponentAnsys123.hh"
+#include "Garfield/ViewField.hh"
+#include "Garfield/MediumMagboltz.hh"
+#include "Garfield/Sensor.hh"
+#include "Garfield/AvalancheMicroscopic.hh"
+#include "Garfield/AvalancheMC.hh"
+#include "Garfield/Random.hh"
+#include "Garfield/Plotting.hh"
 
 using namespace Garfield;
 
@@ -146,7 +146,7 @@ int main(int argc, char * argv[]) {
     const double smear = pitch / 2.;
     double x0 = 0.;//-smear + RndmUniform() * smear;
     double y0 = 0.;//-smear + RndmUniform() * smear;
-    double z0 = -0.2;
+    double z0 = -0.1;
     double t0 = 0.;
     double e0 = 0.1;
     aval->AvalancheElectron(x0, y0, z0, t0, e0, 0., 0., 0.);

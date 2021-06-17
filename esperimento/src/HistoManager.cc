@@ -179,11 +179,11 @@ void HistoManager::Book()
   h->GetYaxis()->SetTitle("events");
   h->GetXaxis()->SetTitle("t_{decay} #mus");
   h->StatOverflows();
-  histos.push_back(h=new TH1D("histo_up","Time of Decay [Up]",200,0,11) ); // microsecond
+  histos.push_back(h=new TH1D("histo_up","Time of Decay [Up]",30,0,11) ); // microsecond
   h->GetYaxis()->SetTitle("up events");
   h->GetXaxis()->SetTitle("t_{decay} #mus");
   h->StatOverflows();
-  histos.push_back(h=new TH1D("histo_down","Time of Decay [Down]",200,0,11) ); // microsecond
+  histos.push_back(h=new TH1D("histo_down","Time of Decay [Down]",30,0,11) ); // microsecond
   h->GetYaxis()->SetTitle("down events");
   h->GetXaxis()->SetTitle("t_{decay} #mus");
   h->StatOverflows();
