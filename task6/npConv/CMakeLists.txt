@@ -63,6 +63,8 @@ set(EXAMPLENPCONV_SCRIPTS
   neutr3.mac
   analyse.py
   script.sh
+  unscript.sh
+  analyse_zoom.py
   )
 
 foreach(_script ${EXAMPLENPCONV_SCRIPTS})
