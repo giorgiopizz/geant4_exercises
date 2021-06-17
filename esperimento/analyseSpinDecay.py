@@ -21,12 +21,23 @@ from math import *  #sqrt, exp, cos, pi
 from ROOT import TCanvas, TF1, TFile, TGaxis, TH1D, TGraph, TGraphErrors
 from ROOT import gROOT, gStyle, gApplication
 from ROOT import kRed
-
+from math import floor
 # set some global style options
 gROOT.SetStyle('Plain')
 gStyle.SetOptFit(1)
 TGaxis.SetMaxDigits(3)
 
+
+def closest_divisor(n, m):
+    """find the divisor of n that
+    is closest to m"""
+    closest = -10
+    for i in range(1, n,1):
+        if n%i==0:
+            #divisor
+            if abs(m-i)<abs(m-closest):
+                closest = i
+    return closest
 
 ## define simple decay fit function
 def decay(x,par):
@@ -95,7 +106,7 @@ myspinfit.SetLineColor(kRed)
 myspinfit.SetLineWidth(1)
 
 
-myAsymmetryF = TF1('asymmetry_tf1', asymmetry_function, 0., 10, 3)
+myAsymmetryF = TF1('asymmetry_tf1', asymmetry_function, 0., 6, 3)
 myAsymmetryF.SetParName(0,'#xi')
 myAsymmetryF.SetParameter(0,0.32)
 myAsymmetryF.SetParName(1,'#omega')
@@ -149,25 +160,51 @@ def analyseDecay(fname):
     y = []
     x_err = []
     y_err = []
-    for i in range(file.decayTimeForward.GetNbinsX()):
-        U = file.decayTimeForward.GetBinContent(i)
-        D = file.decayTimeBackward.GetBinContent(i)
-        x.append(file.decayTimeForward.GetBinCenter(i))
-        x_err.append(11/(file.decayTimeForward.GetNbinsX()*sqrt(12)))
-        try:
-            v = (U-D)/(U+D)
-            # print(v)
-            y_err.append(2*sqrt(U*D/(U+D)**3))
-            print(y_err)
-        except:
-            v= 0
-            y_err.append(0)
-        y.append(v)
-        # asymmetry_histo.SetBinContent(i, x)
+    try:
+        bins = file.decayTimeForward.GetNbinsX()
+        rebin = bins
+        # file.decayTimeForward.Rebin(rebin)
+        # file.decayTimeBackward.Rebin(rebin)
+        for i in range(file.decayTimeForward.GetNbinsX()):
+            U = file.decayTimeForward.GetBinContent(i)
+            D = file.decayTimeBackward.GetBinContent(i)
+            x.append(file.decayTimeForward.GetBinCenter(i))
+            x_err.append(11/(file.decayTimeForward.GetNbinsX()*sqrt(12)))
+            try:
+                v = (U-D)/(U+D)
+                # print(v)
+                y_err.append(2*sqrt(U*D/(U+D)**3))
+                print(y_err)
+            except:
+                v= 0
+                y_err.append(0)
+            y.append(v)
+            # asymmetry_histo.SetBinContent(i, x)
 
+    except:
+        bins = file.histo_up.GetNbinsX()
+        # rebin = bins/closest_divisor(bins, 60)
+        rebin = bins
+        # file.histo_up.Rebin(rebin)
+        # file.histo_down.Rebin(rebin)
+        for i in range(file.histo_up.GetNbinsX()):
+            U = file.histo_up.GetBinContent(i)
+            D = file.histo_down.GetBinContent(i)
+            x.append(file.histo_up.GetBinCenter(i))
+            x_err.append(11/(file.histo_up.GetNbinsX()*sqrt(12)))
+            try:
+                v = (U-D)/(U+D)
+                # print(v)
+                y_err.append(2*sqrt(U*D/(U+D)**3))
+                print(y_err)
+            except:
+                v= 0
+                y_err.append(0)
+            y.append(v)
+            # asymmetry_histo.SetBinContent(i, x)
 
     c4 = TCanvas('c4','Asymm',10,10,700,500)
-    asymmetry_graph = TGraphErrors(file.decayTimeForward.GetNbinsX(),np.array(x),np.array(y), np.array(x_err), np.array(y_err))
+    asymmetry_graph = TGraphErrors(rebin,np.array(x),np.array(y), np.array(x_err), np.array(y_err))
     c4.cd()
     asymmetry_graph.GetXaxis().SetRangeUser(0.1,11)
     asymmetry_graph.Draw("ALP")
@@ -175,7 +212,7 @@ def analyseDecay(fname):
     # asymmetry_histo.Draw()
     # asymmetry_histo.Fit(myAsymmetryF)
 
-    file2 = TFile("provaajeijfwo.root", "recreate")
+    file2 = TFile('asym_'+fname, "recreate")
     asymmetry_graph.Write()
 
 
@@ -183,6 +220,8 @@ def analyseDecay(fname):
     c4.Modified()
     c4.Update()
 
+    imagename ='asym_'+  fname.split('.')[0] + '.png'
+    c4.SaveAs(imagename)
     file2.Close()
 
 def calcLande(omega,bfield):

@@ -18,12 +18,17 @@ gROOT.SetStyle('Plain')
 gStyle.SetOptFit(1)
 TGaxis.SetMaxDigits(3)
 
-
-file = TFile.Open("asymmetry_magnetico.root", "read")
+if len(sys.argv)>2:
+    fname1 = sys.argv[1]
+    fname2 = sys.argv[2]
+else:
+    fname1 = "asymmetry_magnetico.root"
+    fname2 = "asymmetry_magnetico_spento.root"
+file = TFile.Open(fname1, "read")
 file.ls()
 
 
-file2 = TFile.Open("asymmetry_magnetico_spento.root", "read")
+file2 = TFile.Open(fname2, "read")
 file2.ls()
 
 c4 = TCanvas('c4','Asymm',10,10,700,500)
