@@ -24,6 +24,7 @@
 #include "Garfield/AvalancheMC.hh"
 #include "Garfield/Random.hh"
 #include "Garfield/Plotting.hh"
+#include "Garfield/ViewFEMesh.hh"
 
 using namespace Garfield;
 
@@ -146,7 +147,7 @@ int main(int argc, char * argv[]) {
     const double smear = pitch / 2.;
     double x0 = 0.;//-smear + RndmUniform() * smear;
     double y0 = 0.;//-smear + RndmUniform() * smear;
-    double z0 = -0.1;
+    double z0 = -0.2;
     double t0 = 0.;
     double e0 = 0.1;
     aval->AvalancheElectron(x0, y0, z0, t0, e0, 0., 0., 0.);
@@ -173,7 +174,7 @@ int main(int argc, char * argv[]) {
         sumElectronsUpperMetal += 1.;
       } else if (ze2 <= -kapton / 2. && ze2 >= -kapton / 2. - metal) {
         sumElectronsLowerMetal += 1.;
-      } else if (ze2 < -kapton / 2. - metal) {
+    } else if (ze2 > kapton / 2. + metal) {
         sumElectronsTransfer += 1.;
       } else {
         sumElectronsOther += 1.;
@@ -289,8 +290,28 @@ int main(int argc, char * argv[]) {
   }
 
   if (plotDrift) {
-    driftView->SetCanvas(cD);
-    driftView->Plot(true, true);
+      TCanvas* cd = new TCanvas();
+      constexpr bool plotMesh = true;
+      if (plotMesh){
+          ViewFEMesh* meshView = new ViewFEMesh();
+          meshView->SetArea(-2 * pitch, -2 * pitch, -0.3,
+                            2 * pitch, 2 * pitch, 0.1);
+          meshView->SetCanvas(cd);
+          meshView->SetComponent(fm);
+          // x-z projection
+          meshView->SetPlane(0, -1, 0, 0, 0, 0);
+          meshView->SetFillMesh(true);
+          // Set the color of the kapton.
+          meshView->SetColor(0, kGray);
+          meshView->SetColor(2, kYellow + 3);
+          meshView->EnableAxes();
+          meshView->SetViewDrift(driftView);
+          meshView->Plot();
+      }
+    // driftView->SetCanvas(cD);
+    // driftView->Plot(true, true);
+
+
   }
 
   const bool plotHistogram = true;
