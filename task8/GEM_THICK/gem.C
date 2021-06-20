@@ -68,7 +68,7 @@ int main(int argc, char * argv[]) {
 
   // Setup the gas.
   MediumMagboltz* gas = new MediumMagboltz();
-  gas->SetComposition("ar", 90., "co2", 10.);
+  gas->SetComposition("ar", 70., "co2", 30.);
   gas->SetTemperature(293.15);
   gas->SetPressure(760.);
   gas->EnableDebugging();
@@ -114,9 +114,9 @@ int main(int argc, char * argv[]) {
   }
 
   // Histograms
-  int nBinsGain = 100;
+  int nBinsGain = 1000;
   double gmin =   0.;
-  double gmax = 100.;
+  double gmax = 10000.;
   TH1F* hElectrons = new TH1F("hElectrons", "Number of electrons",
                               nBinsGain, gmin, gmax);
   TH1F* hIons = new TH1F("hIons", "Number of ions",
@@ -139,8 +139,8 @@ int main(int argc, char * argv[]) {
   double sumElectronsTransfer = 0.;
   double sumElectronsOther = 0.;
   double sumElectronMultiplied=0.;
-
-  const int nEvents = 10;
+  double sumElectronMultipliedTot = 0; //questa serve per considerare moltiplicazione media in diversi eventi e riportarlo come gain
+  const int nEvents = 100;
   for (int i = nEvents; i--;) {
     if (debug || i % 10 == 0) std::cout << i << "/" << nEvents << "\n";
     // Randomize the initial position.
@@ -182,6 +182,7 @@ int main(int argc, char * argv[]) {
 	if(ze2>0.05)
 	{
 		sumElectronMultiplied++;
+        sumElectronMultipliedTot++;
 	}
       drift->DriftIon(xe1, ye1, ze1, te1);
       drift->GetIonEndpoint(0, xi1, yi1, zi1, ti1,
@@ -225,7 +226,7 @@ int main(int argc, char * argv[]) {
   std::cout << "    transfer:    " << fTransfer * 100. << "%\n";
   std::cout << "    other:       " << fOther * 100. << "%\n";
   std::cout << "Total Number of multiplied electrons:" << sumElectronMultiplied << "\n";
-
+  std::cout << "Gain: " << sumElectronMultipliedTot/nEvents << std::endl;
   TCanvas* cD = new TCanvas();
   const bool plotGeo = false;
   if (plotGeo && plotDrift) {
@@ -327,7 +328,13 @@ int main(int argc, char * argv[]) {
     cH->cd(4);
     hChrgI->Draw();
   }
+  TCanvas* cnv = new TCanvas("cnv", "H", 1200,800);
+  cnv->cd();
+  double min = hElectrons->GetMinimum();
+  double max = hElectrons->GetMaximum();
+  hElectrons->GetXaxis()->SetRangeUser(min, max);
 
+  hElectrons->Draw();
   app.Run(kTRUE);
 
 }

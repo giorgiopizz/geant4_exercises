@@ -63,17 +63,17 @@ void Analysis::PrepareNewRun(const G4Run* /*aRun*/ )
 	// create Histograms
 	histos.push_back(h=new TH1D("decayPos","Z Position of Decay",100,0.8*m,(0.8+2.24)*m) );
 	h->GetYaxis()->SetTitle("events");
-	h->GetXaxis()->SetTitle("t_{decay} #mus");
+	h->GetXaxis()->SetTitle("z_{decay} mm");
 	h->StatOverflows();
 	histos.push_back(h=new TH1D("decayTime","Time of Decay",200,0,20 ) ); //microsecond
 	h->GetYaxis()->SetTitle("events");
 	h->GetXaxis()->SetTitle("t_{decay} #mus");
 	h->StatOverflows();
-	histos.push_back(h=new TH1D("decayTimeForward","Time of Decay [Forward electron]",40,0,20) ); // microsecond
+	histos.push_back(h=new TH1D("decayTimeForward","Time of Decay [Forward electron]",200,0,20) ); // microsecond
 	h->GetYaxis()->SetTitle("forward events");
 	h->GetXaxis()->SetTitle("t_{decay} #mus");
 	h->StatOverflows();
-	histos.push_back(h=new TH1D("decayTimeBackward","Time of Decay [Backward electron]",40,0,20) ); // microsecond
+	histos.push_back(h=new TH1D("decayTimeBackward","Time of Decay [Backward electron]",200,0,20) ); // microsecond
 	h->GetYaxis()->SetTitle("backward events");
 	h->GetXaxis()->SetTitle("t_{decay} #mus");
 	h->StatOverflows();

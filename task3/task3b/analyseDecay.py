@@ -58,6 +58,7 @@ def analyseDecay(fname):
     c1.Update()
 
     c2 = TCanvas('c2','Decay Position',250,20,700,500)
+    file.decayPos.GetXaxis().SetTitle("Pos decay (mm)")
     file.decayPos.Draw()
 
     # print out results

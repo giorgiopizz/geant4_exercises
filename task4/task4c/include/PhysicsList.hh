@@ -10,7 +10,7 @@
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
-
+#include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4VPhysicsConstructor;
@@ -44,13 +44,11 @@ protected:
   void SetCuts();
   //@}
 private:
- 
+
   G4VPhysicsConstructor*  emPhysicsList;
- 
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
- 
