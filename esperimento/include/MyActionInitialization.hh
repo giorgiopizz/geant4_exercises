@@ -10,4 +10,6 @@ class MyActionInitialization :
  virtual ~MyActionInitialization();
  virtual void BuildForMaster() const;
  virtual void Build() const;
+// private:
+//     DetectorConstruction* detector;
 };

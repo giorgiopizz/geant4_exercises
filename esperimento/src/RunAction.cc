@@ -11,10 +11,13 @@
 #include "RunAction.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "Analysis.hh"
-// #include "G4analysis.hh"
+#include "HistoManager.hh"
+#include "MyRun.hh"
+
 RunAction::RunAction()
+: G4UserRunAction()
 {
+
 	// G4RunManager::GetRunManager()->SetPrintProgress(1);
  //
  // // Create analysis manager
@@ -39,22 +42,45 @@ RunAction::RunAction()
  //  analysisManager->CreateH1("decayTimeBackward","Edep in absorber", 25, 0., 11);
 
 }
+
+
+G4Run* RunAction::GenerateRun()
+{ return (new MyRun()); }
+
+
 // RunAction::~RunAction(){
 // 	// delete G4AnalysisManager::Instance();
 // }
 void RunAction::BeginOfRunAction(const G4Run* aRun )
 {
 	// G4AnalysisManager * analysisManager = G4Analysis::ManagerInstance("root");
-	if (IsMaster())
-  G4cout << "### Run " << aRun->GetRunID() << " starts (master)." << G4endl;
+	// HistoManager::GetInstance()->Book();
+	if (IsMaster()){
+		G4cout << "### Run " << aRun->GetRunID() << " starts (master)." << G4endl;
+		HistoManager::GetInstance()->Book();
+	}
+
 else
   G4cout << "### Run " << aRun->GetRunID() << " starts (worker)." << G4endl;
 	// G4cout<<"Starting Run: "<<aRun->GetRunID()<<G4endl;
-	Analysis::GetInstance()->PrepareNewRun(aRun);
+	// Analysis::GetInstance()->PrepareNewRun(aRun);
+	// G4cout <<"ciaoiwfiorfhjeiorjfiorejfior" << G4endl;
+
 }
 
 void RunAction::EndOfRunAction( const G4Run* aRun )
 {
-	Analysis::GetInstance()->EndOfRun(aRun);
-	std::cout << "\n\n Number of decays: " << Analysis::GetInstance()->numDecays() << std::endl;
+	// Analysis::GetInstance()->EndOfRun(aRun);
+	// std::cout << "\n\n Number of decays: " << Analysis::GetInstance()->numDecays() << std::endl;
+	if (IsMaster()) HistoManager::GetInstance()->Save();
+	// HistoManager::GetInstance()->Save();
+    const MyRun* theRun = static_cast<const MyRun*> (aRun);
+    // if(IsMaster())
+    // {
+    //   G4cout << "Global result with " << theRun->GetNumberOfEvent()
+    //          << " events : " << theRun->GetTotalEDep()/GeV << " [GeV]" << G4endl;
+    // } else {
+    //   G4cout << "Local thread result with " << theRun->GetNumberOfEvent()
+    //          << " events : " << theRun->GetTotalEDep()/GeV << " [GeV]" << G4endl;
+    // }
 }

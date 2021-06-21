@@ -376,8 +376,8 @@ void PhysicsList::SetCuts()
 //             pmanager->RemoveProcess(process);
 //             process = new G4MuonMinusCapture(new G4MuMinusCapturePrecompound());
 //             pmanager->AddRestProcess(process);
-//             process = new G4MuonMinusCapture(new G4MuonMinusBoundDecay());
-//             pmanager->AddRestProcess(process);
+//             // process = new G4MuonMinusCapture(new G4MuonMinusBoundDecay());
+//             // pmanager->AddRestProcess(process);
 //         }
 //       }
 //

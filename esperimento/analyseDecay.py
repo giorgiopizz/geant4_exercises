@@ -52,18 +52,18 @@ def analyseDecay(fname):
 
     # draw histogram and fit
     c1 = TCanvas('c1','Decay Time',10,10,700,500)
-    file.decayTime.Draw()
-    file.decayTime.Fit(myfit);
+    file.histo_tot.Draw()
+    file.histo_tot.Fit(myfit);
     c1.Modified()
     c1.Update()
 
-    c2 = TCanvas('c2','Decay Position',250,20,700,500)
-    file.decayPos.Draw()
-
-    # print out results
-    print 'average Decay time =',file.decayTime.GetMean(),'ms'
-    print 'fitted Decay time = (',myfit.GetParameter('tau'),'+-',myfit.GetParError(1),') ms'
-    print 'average Decay position =',file.decayPos.GetMean(),'mm'
+    # c2 = TCanvas('c2','Decay Position',250,20,700,500)
+    # file.decayPos.Draw()
+    #
+    # # print out results
+    # print 'average Decay time =',file.decayTime.GetMean(),'ms'
+    # print 'fitted Decay time = (',myfit.GetParameter('tau'),'+-',myfit.GetParError(1),') ms'
+    # print 'average Decay position =',file.decayPos.GetMean(),'mm'
 
 
 if __name__=='__main__':

@@ -14,7 +14,8 @@
  * \brief User's Run Action
  */
 #include "G4UserRunAction.hh"
-
+#include "HistoManager.hh"
+#include "globals.hh"
 class G4Run;
 
 /*!
@@ -30,12 +31,14 @@ public:
 	//! constructor
 	RunAction();
 	//! destructor
-	virtual ~RunAction() {};
+	// virtual ~RunAction() {};
 	//! Called at the beginning of each run
-	void BeginOfRunAction(const G4Run*);
+	virtual void BeginOfRunAction(const G4Run*);
 	//! Called at the end of each run
-	void EndOfRunAction(const G4Run*);
-private:
+	virtual void EndOfRunAction(const G4Run*);
+	G4Run* GenerateRun();
+// private:
+// 	HistoManager* histoManager;
 };
 
 #endif /* RUNACTION_HH_ */

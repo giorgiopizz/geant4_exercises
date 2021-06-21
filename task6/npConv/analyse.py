@@ -124,20 +124,21 @@ def analyseDecay():
     h = file.EnDis
 
     h1 = h.RebinX(5)
-    h1.GetXaxis().SetRange(1,300)
+    max = h1.FindLastBinAbove()
+    h1.GetXaxis().SetRange(1,max)
     h1.Draw()
     # c1.SetLogy()
     c1.SaveAs("histo_"+argv[1]+".png")
     c1.Modified()
     c1.Update()
 
-    c2 = TCanvas('c2','Mother Energy Distribution',10,10,1800,1200)
-
-    a = file2.Get("Gas_Tree")
-    a.Draw("medep")
-    c2.SaveAs("histo_mother_"+argv[1]+".png")
-    c2.Modified()
-    c2.Update()
+    # c2 = TCanvas('c2','Mother Energy Distribution',10,10,1800,1200)
+    #
+    # a = file2.Get("Gas_Tree")
+    # a.Draw("medep")
+    # c2.SaveAs("histo_mother_"+argv[1]+".png")
+    # c2.Modified()
+    # c2.Update()
 
 
 
@@ -171,6 +172,6 @@ def analyseDecay():
 if __name__=='__main__':
     # check for run time arguments
     analyseDecay()
-    gApplication.Run()
+    # gApplication.Run()
 
 print "\n to quit press Ctrl-D"

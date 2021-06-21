@@ -63,8 +63,10 @@ set(AnaEx02_SCRIPTS
     muonSpin.mac
     muonFast.mac
     script.py
+    analyseNtupleMaterial.py
+    analyseMaterial.cpp
   )
-
+set(CMAKE_AUTOMOC ON)
 foreach(_script ${AnaEx02_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}

@@ -6,7 +6,7 @@
 /gps/polarization 0. 0. 1.
 
 # si può impostare cut più lungo
-/run/setCut 1 km
+#/run/setCut 1 km
 
 
 /run/beamOn 100000
